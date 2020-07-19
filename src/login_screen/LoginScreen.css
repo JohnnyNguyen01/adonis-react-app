@@ -1,0 +1,27 @@
+        .background {
+            background-color: #EE240E;
+            height: 100vh;
+            width: 100vw;
+            opacity: 90%;
+        }
+        
+        .card {
+            position: absolute;
+            left: 50%;
+            top: 30%;
+            width: 450px;
+            height: 450px;
+        }
+        
+        .card_children {
+            padding-left: 30%;
+            padding-top: 30%;
+            position: relative;
+            width: max-content;
+            height: max-content;
+        }
+        
+        .textField {
+            margin-bottom: 16px;
+            width: 100%;
+        }
