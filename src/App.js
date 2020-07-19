@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import LoginScreen from "./login_screen/LoginScreen";
+import LoginScreen from "./components/login_screen/LoginScreen";
 import Firebase from "./firebase";
+import Dashboard from './components/dashboard/Dashboard';
+import { CircularProgress } from '@material-ui/core';
 
 const App = () => {
     const [isFirebaseInitialized, setisFirebaseInitialized] = useState(false);
@@ -16,9 +18,13 @@ const App = () => {
         <Router>
             <Switch>
                 <Route exact path="/" component={LoginScreen}/>
+                <Route exact path="/dash" component={Dashboard}/>
             </Switch>
         </Router>
-    ) : <div>Firbase backend is loading</div> ;
+    ) : (
+    <div style={{textAlign: "center", top:"40%"}}>
+        <CircularProgress/>
+    </div>) ;
 }
 
 export default App;

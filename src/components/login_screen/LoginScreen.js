@@ -3,9 +3,9 @@ import './LoginScreen.css';
 import { Button } from "@material-ui/core";
 import { TextField } from "@material-ui/core";
 import { Paper } from "@material-ui/core";
-import Firebase from "../firebase";
+import Firebase from "../../firebase";
 
-const LoginScreen = () => {
+const LoginScreen = (props) => {
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
     const[emailIsValid, setEmailIsValid] = useState(false);
@@ -13,8 +13,10 @@ const LoginScreen = () => {
     const onLogin = async () => {
         try{
            await Firebase.login(email, password);
+           props.history.replace("/dash");
+           console.log(Firebase.getCurrentUser);
         } catch (error) {
-            alert(error);
+            alert(error.message);
         }
     }
 

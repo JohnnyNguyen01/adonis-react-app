@@ -35,6 +35,14 @@ class Firebase {
         return new Promise(resolve => 
             { this.auth.onAuthStateChanged(resolve) });
     }
+
+    async currentUserExists(){
+        return this.auth.currentUser.uid ? true : false ;
+    }
+
+    async getCurrentUser(){
+        return await this.auth.currentUser;
+    }
 }
 
 export default new Firebase();

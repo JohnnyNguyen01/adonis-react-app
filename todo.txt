@@ -1,0 +1,15 @@
+Todo:
+
+[] Login Screen
+    [x] UI
+    [] Form Validation
+[x] Firebase Connection
+[x] Firestore helper (Can't instantiate concrete models/classes like strongly typed language?)
+[x] Navigation - Routing? (See if there's a way to do condition navigation based on whether user is loggedin)
+    [x] Just use conditional routing - if currentUser == null, navigate.pushNamedReplacement('/Homescreen')
+[] Read all users from Firestore (dropdown?)
+[] Read all user workouts
+[] Create workout for selected user 
+[] Dashboard
+    [] Look @ Dribbble for ui inspo or material documentation for examples
+    [] Drawer - left side permanent(View Users, Add Users)
