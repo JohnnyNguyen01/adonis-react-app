@@ -8,7 +8,7 @@ import Firebase from "../firebase";
 const LoginScreen = () => {
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
-    const[emailIsValid, setEmailIsValid] = useState(null);
+    const[emailIsValid, setEmailIsValid] = useState(false);
     
     const onLogin = async () => {
         try{
