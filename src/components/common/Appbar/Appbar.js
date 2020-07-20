@@ -5,7 +5,7 @@ const Appbar = () => {
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h4"> Header </Typography>
+                <Typography > Dashboard </Typography>
             </Toolbar>
         </AppBar>
     );

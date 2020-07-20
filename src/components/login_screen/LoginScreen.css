@@ -7,7 +7,7 @@
         
         .card {
             position: absolute;
-            left: 50%;
+            left: 43%;
             top: 30%;
             width: 450px;
             height: 450px;
@@ -15,7 +15,6 @@
         
         .form {
             text-align: center;
-            padding-top: 30%;
         }
         
         .textfield {
@@ -24,4 +23,10 @@
         
         .bottom-margin {
             margin-bottom: 12px;
+        }
+        
+        .img {
+            padding-top: 40px;
+            padding-left: 75px;
+            opacity: 80%;
         }

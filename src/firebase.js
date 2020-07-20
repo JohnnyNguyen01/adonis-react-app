@@ -1,6 +1,7 @@
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import User from "./models/User";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCJ4lNinmD-aLMlZHSC0mpRAHnWbbEpyuQ",
@@ -32,16 +33,27 @@ class Firebase {
 
     async isInitialized() {
         //todo: see how promises work compared to futures
-        return new Promise(resolve => 
-            { this.auth.onAuthStateChanged(resolve) });
+        return new Promise(resolve => { this.auth.onAuthStateChanged(resolve) });
     }
 
-    async currentUserExists(){
-        return this.auth.currentUser.uid ? true : false ;
+    async currentUserExists() {
+        return this.auth.currentUser.uid ? true : false;
     }
 
-    async getCurrentUser(){
+    async getCurrentUser() {
         return await this.auth.currentUser;
+    }
+
+    async getUserList() {
+        var userList = [];
+        await app.firestore().collection("users").get().then((snapshot) => {
+            snapshot.forEach((doc) => {
+                //    var readDoc = doc.data();
+                //console.log(readDoc["username"]);
+                userList.push(doc.data());
+            });
+        });
+        return userList;
     }
 }
 
