@@ -5,8 +5,9 @@ import { Grid } from "@material-ui/core";
 import Appbar from "../common/Appbar/Appbar";
 import { TextField, Typography, Avatar, Button } from "@material-ui/core";
 import useStyles from "./UseStyles";
-import UserTable from "./widgets/UserTable/UserTable";
+import UserTable from "../UserTable/UserTable";
 import firebase from "../../firebase";
+import ExerciseBlock from "./widgets/ExerciseBlock";
 
 const Dashboard = (props) => {
     const classes = useStyles();
@@ -22,14 +23,16 @@ const Dashboard = (props) => {
         <Grid container direction="column">
             <Grid item> <Appbar /></Grid>
             <Grid item container>
-                <Grid item xs={1} sm={2}> Where the Drawer will be</Grid>
+                <Grid item xs={1} sm={2}> 
+                    <DashDrawer/>
+                </Grid>
                 <Grid item xs={12} sm={8}>
                     <div className={classes.marginTop}>
-                        <UserTable/>
+                        <UserTable />
                     </div>
                     <div className={classes.marginTop}>
                         <div>
-                            <Avatar variant="square" className={classes.square} src="W"/>
+                            <Avatar variant="square" className={classes.square} />
                             <Typography>Week 1 Day 1</Typography>
                         </div>
                         <form>
@@ -43,10 +46,14 @@ const Dashboard = (props) => {
                                 className={classes.textfield}
                             />
                         </form>
-                        <Button 
-                        className={`${classes.marginTop} ${classes.button}`} 
-                        variant="contained"
-                        onClick={firebase.getUserList}>Add new Exercise</Button>
+                        <Button
+                            className={`${classes.marginTop} ${classes.button}`}
+                            variant="contained"
+                            onClick={firebase.getUserList}>Add new Exercise
+                        </Button>
+                    </div>
+                    <div className={classes.marginTop}>
+                        {ExerciseBlock()}
                     </div>
                 </Grid>
                 <Grid item xs={1} sm={2}> Where the footer will be</Grid>

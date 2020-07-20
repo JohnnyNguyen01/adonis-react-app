@@ -1,4 +1,7 @@
-Todo:
+Tasks Todo for Stomble:
+
+    Fellas, please be gentle, I'm a bit special when it comes to JS. 
+    Strongly typed languages > JS 
 
 [] Login Screen
     [x] UI
@@ -7,9 +10,26 @@ Todo:
 [x] Firestore helper (Can't instantiate concrete models/classes like strongly typed language?)
 [x] Navigation - Routing? (See if there's a way to do condition navigation based on whether user is loggedin)
     [x] Just use conditional routing - if currentUser == null, navigate.pushNamedReplacement('/Homescreen')
-[] Read all users from Firestore (dropdown?)
+[x] Read all users from Firestore (dropdown?)
 [] Read all user workouts
 [] Create workout for selected user 
 [] Dashboard
     [] Look @ Dribbble for ui inspo or material documentation for examples
     [] Drawer - left side permanent(View Users, Add Users)
+[x] User Table
+    [x] Fetch Data from firebase in firebase.js
+    [x] Learn about promises -> doesn't function same way as Dart :( 
+    [x] Render each user on the table
+[ ] Exercise Block
+    [ ] User Interface
+    [ ] CRUD operation with Firebase
+    [ ] reps/sets table columns:
+        // sets
+        // reps,seconds
+        // rir or rpe
+        // percentage
+        // weights
+
+[ ] General Refactor
+    -- Exercise Block --
+    [ ] Refactor Dropdown into common widgets 

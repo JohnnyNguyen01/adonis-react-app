@@ -1,9 +1,9 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { red, white } from '@material-ui/core/colors';
+import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
     textfield: {
-        width: "80%"
+        width: "85%"
     },
     square: {
         color: theme.palette.getContrastText(red[500]),

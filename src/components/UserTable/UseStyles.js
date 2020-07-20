@@ -18,7 +18,10 @@ const useStyles = makeStyles({
     },
     floatRight:{
         float: "right",
-    }
+    },
+    inline: {
+        display: "inline-block",
+    },
 });
 
 export default useStyles;

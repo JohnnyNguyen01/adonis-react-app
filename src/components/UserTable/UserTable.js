@@ -6,8 +6,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Firebase from "../../../../firebase";
-import { Avatar, Button } from "@material-ui/core";
+import Firebase from "../../firebase";
+import { Avatar, Button, Typography } from "@material-ui/core";
 import useStyles from "./UseStyles";
 
 async function getUserList() {
@@ -35,12 +35,13 @@ export default function UserTable() {
 
 
     const renderedUsers = userList.map((user) => {
-        console.log(user);
         return (
             <TableRow key={user.email}>
                 <TableCell component="th" scope="row">
-                    <Avatar alt={user.username} src={user.image_url} />
-                    {user.username}
+                    <div className={classes.inline}>
+                        <Avatar alt={user.username} src={user.image_url} />
+                        <Typography>{user.username}</Typography>
+                    </div>
                 </TableCell>
                 <TableCell align="right">{user.email}</TableCell>
             </TableRow>

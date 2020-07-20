@@ -48,8 +48,6 @@ class Firebase {
         var userList = [];
         await app.firestore().collection("users").get().then((snapshot) => {
             snapshot.forEach((doc) => {
-                //    var readDoc = doc.data();
-                //console.log(readDoc["username"]);
                 userList.push(doc.data());
             });
         });
