@@ -29,7 +29,7 @@ const Dashboard = (props) => {
                     </div>
                     <div className={classes.marginTop}>
                         <div>
-                            <Avatar variant="square" className={classes.square} />
+                            <Avatar variant="square" className={classes.square} src="W"/>
                             <Typography>Week 1 Day 1</Typography>
                         </div>
                         <form>
