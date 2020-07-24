@@ -27,9 +27,7 @@ const Dashboard = (props) => {
                     <DashDrawer/>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                    <div className={classes.marginTop}>
-                        <UserTable />
-                    </div>
+
                     <div className={classes.marginTop}>
                         <div>
                             <Avatar variant="square" className={classes.square} />

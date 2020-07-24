@@ -53,6 +53,14 @@ class Firebase {
         });
         return userList;
     }
+
+    async getExerciseList() {
+        var exerciseList = [];
+        await app.firestore().collection("exercises").get().then(snapshot => {
+            snapshot.forEach((doc) => exerciseList.push(doc.data()));
+        });
+        return exerciseList;
+    }
 }
 
 export default new Firebase();

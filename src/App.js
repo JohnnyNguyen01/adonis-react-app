@@ -14,17 +14,18 @@ const App = () => {
         });
     });
 
-    return isFirebaseInitialized ? (
+    return (
         <Router>
             <Switch>
                 <Route exact path="/" component={LoginScreen}/>
                 <Route exact path="/dash" component={Dashboard}/>
             </Switch>
         </Router>
-    ) : (
-    <div style={{textAlign: "center", top:"40%"}}>
-        <CircularProgress/>
-    </div>) ;
+    ) 
+    // : (
+    // <div style={{textAlign: "center", top:"40%"}}>
+    //     <CircularProgress/>
+    // </div>) ;
 }
 
 export default App;
