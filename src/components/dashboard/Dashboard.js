@@ -38,24 +38,25 @@ class Dashboard extends React.Component {
     }
 
     handleAddNewExerciseBtn = () => {
-        var currentList = [...this.state.exerciseBlockList];
-        this.setState({ exerciseBlock: currentList.concat(ExerciseBlock) });
+        this.setState(prevState => {
+            var newElement = prevState.exerciseBlockList.length;
+            return { exerciseBlockList: prevState.exerciseBlockList.concat(newElement) }
+        })
     }
+
 
     render() {
         const { classes } = this.props;
-
         const selectUserOptions = this.state.userDocList.map((doc) => ({
             value: doc.id,
             label: doc.data().username
         }));
-
-        const renderedExerciseBlocks = this.state.exerciseBlockList.map((exerciseBlock, index) => {
+        const renderExerciseBlocks = this.state.exerciseBlockList.map((block, index) => {
             return (
-                <div key={index} className={classes.marginTop}>
-                    {exerciseBlock()}
-                </div>);
-        })
+            <div className={classes.marginTop}>
+                <ExerciseBlock/>
+            </div>);
+        });
         return (
             <Grid container direction="column">
                 <Grid item> <Appbar /></Grid>
@@ -95,7 +96,7 @@ class Dashboard extends React.Component {
                                     className={classes.textfield}
                                 />
                             </form>
-                            {renderedExerciseBlocks}
+                            {renderExerciseBlocks}
                             <Button
                                 className={`${classes.marginTop} ${classes.button}`}
                                 variant="contained"
