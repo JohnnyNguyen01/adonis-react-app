@@ -6,11 +6,32 @@ import Appbar from "../common/Appbar/Appbar";
 import { TextField, Typography, Avatar, Button } from "@material-ui/core";
 import useStyles from "./UseStyles";
 import UserTable from "../UserTable/UserTable";
-import firebase from "../../firebase";
 import ExerciseBlock from "./widgets/ExerciseBlock";
+import OutlinedInputLabel from "../common/OutlinedInputLabel/OutlinedInputLabel";
 
 const Dashboard = (props) => {
     const classes = useStyles();
+    const [userDocList, setUserDocList] = useState([]);
+    const [currentClient, setCurrentClient] = useState(null);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            setUserDocList(await Firebase.getUserListAsDoc());
+        }
+        fetchUsers();
+    }, []);
+
+    const userDropdownOptions = userDocList.map((doc) => ({
+        value: doc.id,
+        label: doc.data().username
+    }));
+
+    const handleUserDropDownOnChange = (docID) => {
+        userDocList.forEach((document) => {
+            if (docID === document.id) setCurrentClient(document);
+        });
+    }
+
 
     if (Firebase.getCurrentUser == null) {
         console.log(Firebase.auth.currentUser);
@@ -23,14 +44,25 @@ const Dashboard = (props) => {
         <Grid container direction="column">
             <Grid item> <Appbar /></Grid>
             <Grid item container>
-                <Grid item xs={1} sm={2}> 
-                    <DashDrawer/>
+                <Grid item xs={1} sm={2}>
+                    <DashDrawer />
                 </Grid>
                 <Grid item xs={12} sm={8}>
-
+                    <div className={classes.marginTop}>
+                        <Typography>Select User: </Typography>
+                        <OutlinedInputLabel
+                            inputLabel="User"
+                            options={userDropdownOptions}
+                            onChange={(event) => handleUserDropDownOnChange(event.target.value)}
+                        />
+                    </div>
                     <div className={classes.marginTop}>
                         <div>
-                            <Avatar variant="square" className={classes.square} />
+                            <Avatar 
+                            variant="square" 
+                            className={classes.square} 
+                            src={currentClient != null? currentClient.data().image_url : null} />
+                            <Typography>{currentClient!= null ? currentClient.data().username : null}</Typography>
                             <Typography>Week 1 Day 1</Typography>
                         </div>
                         <form>
@@ -47,7 +79,7 @@ const Dashboard = (props) => {
                         <Button
                             className={`${classes.marginTop} ${classes.button}`}
                             variant="contained"
-                            onClick={firebase.getUserList}>Add new Exercise
+                            onClick={null}>Add new Exercise
                         </Button>
                     </div>
                     <div className={classes.marginTop}>

@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LoginScreen from "./components/login_screen/LoginScreen";
 import Firebase from "./firebase";
 import Dashboard from './components/dashboard/Dashboard';
@@ -9,23 +9,22 @@ const App = () => {
     const [isFirebaseInitialized, setisFirebaseInitialized] = useState(false);
 
     useEffect(() => {
-        Firebase.isInitialized().then( (value) => {
+        Firebase.isInitialized().then((value) => {
             setisFirebaseInitialized(value);
         });
     });
 
-    return (
+    return (isFirebaseInitialized ?
         <Router>
             <Switch>
-                <Route exact path="/" component={LoginScreen}/>
-                <Route exact path="/dash" component={Dashboard}/>
+                <Route exact path="/" component={LoginScreen} />
+                <Route exact path="/dash" component={Dashboard} />
             </Switch>
-        </Router>
-    ) 
-    // : (
-    // <div style={{textAlign: "center", top:"40%"}}>
-    //     <CircularProgress/>
-    // </div>) ;
+        </Router> :
+
+        <div style={{ textAlign: "center", top: "40%" }}>
+            <CircularProgress />
+        </div>);
 }
 
 export default App;
