@@ -5,7 +5,6 @@ import { Grid } from "@material-ui/core";
 import Appbar from "../common/Appbar/Appbar";
 import { TextField, Typography, Avatar, Button } from "@material-ui/core";
 import useStyles from "./UseStyles";
-import UserTable from "../UserTable/UserTable";
 import ExerciseBlock from "./widgets/ExerciseBlock";
 import OutlinedInputLabel from "../common/OutlinedInputLabel/OutlinedInputLabel";
 
@@ -13,6 +12,7 @@ const Dashboard = (props) => {
     const classes = useStyles();
     const [userDocList, setUserDocList] = useState([]);
     const [currentClient, setCurrentClient] = useState(null);
+    const [exerciseBlockList, setExerciseBlockList] = useState([]);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -32,6 +32,19 @@ const Dashboard = (props) => {
         });
     }
 
+    console.log(exerciseBlockList);
+
+    const handleAddNewExerciseBtn = () => {
+        setExerciseBlockList(exerciseBlockList.concat(ExerciseBlock));
+    }
+
+    const renderExerciseBlocks = 
+    exerciseBlockList.map((exerciseBlock, index) => {
+        return(
+        <div key={index} className={classes.marginTop}>
+            {exerciseBlock()}
+        </div>)
+    });
 
     if (Firebase.getCurrentUser == null) {
         console.log(Firebase.auth.currentUser);
@@ -76,14 +89,12 @@ const Dashboard = (props) => {
                                 className={classes.textfield}
                             />
                         </form>
+                        {renderExerciseBlocks}
                         <Button
                             className={`${classes.marginTop} ${classes.button}`}
                             variant="contained"
-                            onClick={null}>Add new Exercise
+                            onClick={()=> handleAddNewExerciseBtn()}>Add new Exercise
                         </Button>
-                    </div>
-                    <div className={classes.marginTop}>
-                        {ExerciseBlock()}
                     </div>
                 </Grid>
                 <Grid item xs={1} sm={2}> Where the footer will be</Grid>
