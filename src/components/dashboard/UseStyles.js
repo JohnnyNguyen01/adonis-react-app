@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { red } from '@material-ui/core/colors';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme) => ({
     textfield: {
         width: "85%"
     },
@@ -21,6 +21,6 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: red[500],
         color: "#FFFFFF"
     }
-}));
+});
 
 export default useStyles;
