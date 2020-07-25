@@ -4,17 +4,18 @@ import DashDrawer from "../common/drawer/Drawer";
 import { Grid } from "@material-ui/core";
 import Appbar from "../common/Appbar/Appbar";
 import { TextField, Typography, Avatar, Button } from "@material-ui/core";
+import Pagination from '@material-ui/lab/Pagination';
 import { withStyles } from "@material-ui/core/styles";
 import ExerciseBlock from "./widgets/ExerciseBlock";
 import useStyles from "./UseStyles";
 import OutlinedInputLabel from "../common/OutlinedInputLabel/OutlinedInputLabel";
-
 class Dashboard extends React.Component {
 
     state = {
         userDocList: [],
         currentClient: null,
         exerciseBlockList: [],
+        selectedDay: 1
     }
 
     componentDidMount() {
@@ -44,8 +45,8 @@ class Dashboard extends React.Component {
         })
     }
 
-
     render() {
+        console.log(this.state.selectedDay);
         const { classes } = this.props;
         const selectUserOptions = this.state.userDocList.map((doc) => ({
             value: doc.id,
@@ -53,9 +54,9 @@ class Dashboard extends React.Component {
         }));
         const renderExerciseBlocks = this.state.exerciseBlockList.map((block, index) => {
             return (
-            <div className={classes.marginTop}>
-                <ExerciseBlock/>
-            </div>);
+                <div className={classes.marginTop}>
+                    <ExerciseBlock />
+                </div>);
         });
         return (
             <Grid container direction="column">
@@ -83,7 +84,7 @@ class Dashboard extends React.Component {
                                 <Typography>{this.state.currentClient != null ?
                                     this.state.currentClient.data().username : null}
                                 </Typography>
-                                <Typography>Week 1 Day 1</Typography>
+                                <Typography>Week {this.state.selectedDay} Day 1</Typography>
                             </div>
                             <form>
                                 <TextField
@@ -101,10 +102,13 @@ class Dashboard extends React.Component {
                                 className={`${classes.marginTop} ${classes.button}`}
                                 variant="contained"
                                 onClick={() => this.handleAddNewExerciseBtn()}>Add new Exercise
-                        </Button>
+                            </Button>
+                            <Pagination
+                                className={`${classes.marginTop} ${classes.centre}`}
+                                count={7}
+                                onChange={(event,page) => { this.setState({ selectedDay: page }) }} />
                         </div>
                     </Grid>
-                    <Grid item xs={1} sm={2}> Where the footer will be</Grid>
                 </Grid>
             </Grid>
         )

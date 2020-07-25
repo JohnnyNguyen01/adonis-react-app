@@ -20,6 +20,10 @@ const useStyles = (theme) => ({
         textAlign: "left",
         backgroundColor: red[500],
         color: "#FFFFFF"
+    },
+    centre: {
+        left: "50%",
+        marginRight: "- 50%"
     }
 });
 
