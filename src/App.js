@@ -4,6 +4,7 @@ import LoginScreen from "./components/login_screen/LoginScreen";
 import Firebase from "./firebase";
 import Dashboard from './components/dashboard/Dashboard';
 import { CircularProgress } from '@material-ui/core';
+import EditUserScreen from './components/edit_users_screen/EditUsersScreen';
 
 const App = () => {
     const [isFirebaseInitialized, setisFirebaseInitialized] = useState(false);
@@ -19,6 +20,7 @@ const App = () => {
             <Switch>
                 <Route exact path="/" component={LoginScreen} />
                 <Route exact path="/dash" component={Dashboard} />
+                <Route exact path="/editusers" component={EditUserScreen} />
             </Switch>
         </Router> :
 

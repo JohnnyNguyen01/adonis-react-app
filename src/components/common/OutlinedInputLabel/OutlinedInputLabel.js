@@ -10,8 +10,7 @@ import Select from '@material-ui/core/Select';
  * Props that change: 
  *  onChange callback
  *  width
- *  label
- *  inputLabel
+ *  inputlabel
  *  options Array{label, value}
  */
 

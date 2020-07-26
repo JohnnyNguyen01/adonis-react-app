@@ -6,7 +6,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Firebase from "../../firebase";
+import Firebase from "../../../firebase";
 import { Avatar, Button, Typography } from "@material-ui/core";
 import useStyles from "./UseStyles";
 
