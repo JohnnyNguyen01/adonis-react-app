@@ -20,27 +20,12 @@ const useStyles = makeStyles((theme) => ({
         height: "100%",
         backgroundColor: "#212121"
     },
-    button: {
-        marginLeft: 10,
-        marginTop: 10,
-    },
     icon: {
         backgroundColor: "yellow",
         color: grey[500],
         fontSize: 50,
         display: "inline",
         marginTop: 15
-    },
-    linkRoot: {
-        marginLeft: "30%",
-        display: "inline"
-    },
-    navLink: {
-        backgroundColor: "blue",
-        paddingBottom: 5,
-        color: "#FFFFFF",
-        display: "inline",
-        textAlign: "center"
     },
     whiteColor: {
         color: "#FFFFFF"
@@ -58,12 +43,7 @@ const DashDrawer = (props) => {
             className={classes.drawer}
         >
             <Paper className={classes.paper}>
-                {/* <NavLink to="/editusers">
-                    <div className={classes.linkRoot}>
-                        <AccountCircleIcon className={classes.icon} />
-                        <Typography className={classes.navLink}>Manage Users</Typography>
-                    </div>
-                </NavLink> */}
+
                 <List>
                     <Link to="/dash">
                         <ListItem button key="home" className={classes.whiteColor}>

@@ -8,7 +8,6 @@ const EditUserScreen = () => {
 
     return (
         <Grid container direction="column">
-            <Grid item> <Appbar /></Grid>
             <Grid item container>
                 <Grid item xs={1} sm={2}>
                     <DashDrawer />

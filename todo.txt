@@ -14,22 +14,34 @@ Tasks Todo for Stomble:
 [] Read all user workouts
 [] Create workout for selected user 
 [] Dashboard
-    [] Look @ Dribbble for ui inspo or material documentation for examples
+    [x] Look @ Dribbble for ui inspo or material documentation for examples
+        - Refer to TrainHeroic Dashboard Page
     [] Drawer - left side permanent(View Users, Add Users)
+    [x] Render new Exercise Block on AddNewExercise Button click
+    [] Pagination for multiple days in a workout
 [x] User Table
     [x] Fetch Data from firebase in firebase.js
     [x] Learn about promises -> doesn't function same way as Dart :( 
     [x] Render each user on the table
+
+[] Exercises Page 
+    [ ] List all exercises and their youtube links on table
+    [ ] Add new exercise and youtube link to Firebase collection
+
 [ ] Exercise Block
-    [ ] User Interface
+    [x] User Interface
+    [x] onAddNewExercise -> generate new box
     [ ] CRUD operation with Firebase
-    [ ] reps/sets table columns:
+    [x] Embed youtube video for Firebase Exercises 
+    [x] reps/sets table columns:
         // sets
         // reps,seconds
         // rir or rpe
         // percentage
         // weights
 
+
 [ ] General Refactor
     -- Exercise Block --
-    [ ] Refactor Dropdown into common widgets 
+    [x] Refactor Dropdown into common widgets 
+    [ ] Refactor ExerciseBlock into a class component 

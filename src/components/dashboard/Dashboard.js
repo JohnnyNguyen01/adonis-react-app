@@ -2,20 +2,23 @@ import React from "react";
 import Firebase from "../../firebase";
 import DashDrawer from "../common/drawer/Drawer";
 import { Grid } from "@material-ui/core";
-import Appbar from "../common/Appbar/Appbar";
 import { TextField, Typography, Avatar, Button } from "@material-ui/core";
 import Pagination from '@material-ui/lab/Pagination';
 import { withStyles } from "@material-ui/core/styles";
 import ExerciseBlock from "./widgets/ExerciseBlock";
 import useStyles from "./UseStyles";
 import OutlinedInputLabel from "../common/OutlinedInputLabel/OutlinedInputLabel";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns"
 class Dashboard extends React.Component {
 
     state = {
         userDocList: [],
         currentClient: null,
         exerciseBlockList: [],
-        selectedDay: 1
+        selectedDay: 1,
+        startDate: new Date(),
+        endDate: new Date(),
     }
 
     componentDidMount() {
@@ -45,8 +48,16 @@ class Dashboard extends React.Component {
         })
     }
 
+    handleStartDateChange(date){
+        this.setState({startDate: date})
+    }
+
+    handleEndDateChange(date){
+        this.setState({endDate: date})
+    }
+
     render() {
-        console.log(this.state.selectedDay);
+        console.log(this.state.startDate);
         const { classes } = this.props;
         const selectUserOptions = this.state.userDocList.map((doc) => ({
             value: doc.id,
@@ -60,7 +71,6 @@ class Dashboard extends React.Component {
         });
         return (
             <Grid container direction="column">
-                <Grid item> <Appbar /></Grid>
                 <Grid item container>
                     <Grid item xs={1} sm={2}>
                         <DashDrawer />
@@ -73,6 +83,21 @@ class Dashboard extends React.Component {
                                 options={selectUserOptions}
                                 onChange={(event) => this.handleUserDropDownOnChange(event.target.value)}
                             />
+                        </div>
+                        <div>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <DatePicker 
+                                style={{marginRight: 5}}
+                                label="Start Date"
+                                value={this.state.startDate} 
+                                onChange={(date) => {this.handleStartDateChange(date)}} />
+
+                                <DatePicker 
+                                style={{marginLeft: 5}}
+                                label="End Date"
+                                value={this.state.startDate} 
+                                onChange={(date) => {this.handleEndDateChange(date)}} />
+                            </MuiPickersUtilsProvider>
                         </div>
                         <div className={classes.marginTop}>
                             <div>
@@ -106,7 +131,7 @@ class Dashboard extends React.Component {
                             <Pagination
                                 className={`${classes.marginTop} ${classes.centre}`}
                                 count={7}
-                                onChange={(event,page) => { this.setState({ selectedDay: page }) }} />
+                                onChange={(event, page) => { this.setState({ selectedDay: page }) }} />
                         </div>
                     </Grid>
                 </Grid>
