@@ -27,6 +27,15 @@ const App = () => {
         <div style={{ textAlign: "center", top: "40%" }}>
             <CircularProgress />
         </div>);
+
+// return (
+//     <Router>
+//         <Switch>
+//             <Route exact path="/" component={LoginScreen} />
+//             <Route exact path="/dash" component={Dashboard} />
+//             <Route exact path="/editusers" component={EditUserScreen} />
+//         </Switch>
+//     </Router> );
 }
 
 export default App;

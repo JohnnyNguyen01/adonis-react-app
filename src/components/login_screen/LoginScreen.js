@@ -14,7 +14,6 @@ const LoginScreen = (props) => {
         try {
             await Firebase.login(email, password);
             props.history.replace("/dash");
-            console.log(Firebase.getCurrentUser);
         } catch (error) {
             alert(error.message);
         }
