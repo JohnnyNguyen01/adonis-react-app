@@ -2,13 +2,11 @@ import React from "react";
 import { Paper, Button, Typography, Drawer, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { red, grey, blue } from "@material-ui/core/colors";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import List from '@material-ui/core/List';
 
 const useStyles = makeStyles((theme) => ({
@@ -67,16 +65,20 @@ const DashDrawer = (props) => {
                     </div>
                 </NavLink> */}
                 <List>
-                <ListItem button key="home" className={classes.whiteColor}>
-                        <ListItemIcon><AccountCircleIcon className={classes.whiteColor}/></ListItemIcon>
-                        <ListItemText>Home</ListItemText>
-                    </ListItem>
-                    <ListItem button key="userDash" className={classes.whiteColor}>
-                        <ListItemIcon><AccountCircleIcon className={classes.whiteColor}/></ListItemIcon>
-                        <ListItemText>Manage Users</ListItemText>
-                    </ListItem>
+                    <Link to="/dash">
+                        <ListItem button key="home" className={classes.whiteColor}>
+                            <ListItemIcon><AccountCircleIcon className={classes.whiteColor} /></ListItemIcon>
+                            <ListItemText>Home</ListItemText>
+                        </ListItem>
+                    </Link>
+                    <Link to="/editusers">
+                        <ListItem button key="userDash" className={classes.whiteColor}>
+                            <ListItemIcon><AccountCircleIcon className={classes.whiteColor} /></ListItemIcon>
+                            <ListItemText>Manage Users</ListItemText>
+                        </ListItem>
+                    </Link>
                     <ListItem button key="exerciseDash" className={classes.whiteColor}>
-                        <ListItemIcon><AccountCircleIcon className={classes.whiteColor}/></ListItemIcon>
+                        <ListItemIcon><AccountCircleIcon className={classes.whiteColor} /></ListItemIcon>
                         <ListItemText>Manage Exercises</ListItemText>
                     </ListItem>
                 </List>
