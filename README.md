@@ -26,11 +26,17 @@ maintained indefinitely as of writing this.
 
 ### Features to add
 [] CRUD opperations for coaches to users.
+
     [] Create and Remove Users
+
     [] Update User info (goals, progress)
+
 [] Instant messaging (One-to-One) based on Auth().uid and userID
+
 [] Save workouts into modules
+
 [] Create microcycles 
+
     - Workouts that are usually short in program (e.g. 1 week) but are continued indefinitely until the coach programs otherwise.
 
 ### Screens and displays
