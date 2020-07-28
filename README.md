@@ -25,19 +25,27 @@ maintained indefinitely as of writing this.
     - For creating the UI
 
 ### Features to add
-[] CRUD opperations for coaches to users.
+[ ] CRUD opperations for coaches to users.
 
-    [] Create and Remove Users
+[ ] Create and Remove Users
 
-    [] Update User info (goals, progress)
+[ ] Update User info (goals, progress)
 
-[] Instant messaging (One-to-One) based on Auth().uid and userID
+[ ] Instant messaging (One-to-One) based on Auth().uid and userID
 
-[] Save workouts into modules
+[ ] Save workouts into modules
 
-[] Create microcycles 
+[ ] Create microcycles 
 
-    - Workouts that are usually short in program (e.g. 1 week) but are continued indefinitely until the coach programs otherwise.
+- Workouts that are usually short in program (e.g. 1 week) but are continued indefinitely until the coach programs otherwise.
 
 ### Screens and displays
 
+#### Login Page
+![alt text](/screenshots/LoginPage.png "Login Page")
+
+#### Home Page
+![alt text](/screenshots/homepage.png "Home Page")
+
+#### Added Exercises
+![alt text](/screenshots/homepage_withexercises.png "Exercises added to Homepage")
