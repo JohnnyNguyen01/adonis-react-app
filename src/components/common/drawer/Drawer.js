@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const DashDrawer = (props) => {
     const classes = useStyles();
 
-    function handleSignOut(){
+    function handleSignOut() {
         Firebase.logout();
     }
 
@@ -73,12 +73,12 @@ const DashDrawer = (props) => {
                         <ListItemIcon><ForumIcon className={classes.whiteColor} /></ListItemIcon>
                         <ListItemText>Message Clients</ListItemText>
                     </ListItem>
-                    <ListItem button key="signout" className={classes.whiteColor}>
-                        <Link to="/" onClick={() => handleSignOut()}>
+                    <Link to="/" onClick={() => handleSignOut()}>
+                        <ListItem button key="signout" className={classes.whiteColor}>
                             <ListItemIcon><ExitToAppIcon className={classes.whiteColor} /></ListItemIcon>
                             <ListItemText>Sign Out</ListItemText>
-                        </Link>
-                    </ListItem>
+                        </ListItem>
+                    </Link>
                 </List>
             </Paper>
         </Drawer>
