@@ -10,6 +10,7 @@ import useStyles from "./UseStyles";
 import OutlinedInputLabel from "../common/OutlinedInputLabel/OutlinedInputLabel";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns"
+
 class Dashboard extends React.Component {
 
     state = {
@@ -18,7 +19,6 @@ class Dashboard extends React.Component {
         exerciseBlockList: [],
         selectedDay: 1,
         startDate: new Date(),
-        endDate: new Date(),
     }
 
     componentDidMount() {
@@ -48,13 +48,7 @@ class Dashboard extends React.Component {
         })
     }
 
-    handleStartDateChange(date){
-        this.setState({startDate: date})
-    }
-
-    handleEndDateChange(date){
-        this.setState({endDate: date})
-    }
+    handleStartDateChange = (date) => this.setState({ startDate: date })
 
     render() {
         console.log(this.state.startDate);
@@ -65,7 +59,10 @@ class Dashboard extends React.Component {
         }));
         const renderExerciseBlocks = this.state.exerciseBlockList.map((block, index) => {
             return (
-                <div className={classes.marginTop}>
+                <div className={`${classes.marginTop}`}>
+                    <div>
+                        <Typography>Exercise {index + 1}</Typography>
+                    </div>
                     <ExerciseBlock />
                 </div>);
         });
@@ -85,19 +82,17 @@ class Dashboard extends React.Component {
                             />
                         </div>
                         <div>
+                            <Typography variant="h6">Workout Start to End Dates: </Typography>
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <DatePicker 
-                                style={{marginRight: 5}}
-                                label="Start Date"
-                                value={this.state.startDate} 
-                                onChange={(date) => {this.handleStartDateChange(date)}} />
-
-                                <DatePicker 
-                                style={{marginLeft: 5}}
-                                label="End Date"
-                                value={this.state.startDate} 
-                                onChange={(date) => {this.handleEndDateChange(date)}} />
+                                <DatePicker
+                                    style={{ marginRight: 5 }}
+                                    label="Start Date"
+                                    value={this.state.startDate}
+                                    onChange={(date) => { this.handleStartDateChange(date) }} />
                             </MuiPickersUtilsProvider>
+                            <TextField 
+                            style={{marginLeft: 5}}
+                            label="Microcycle length"/>
                         </div>
                         <div className={classes.marginTop}>
                             <div>
@@ -109,7 +104,7 @@ class Dashboard extends React.Component {
                                 <Typography>{this.state.currentClient != null ?
                                     this.state.currentClient.data().username : null}
                                 </Typography>
-                                <Typography>Week {this.state.selectedDay} Day 1</Typography>
+                                <Typography>Day {this.state.selectedDay}</Typography>
                             </div>
                             <form>
                                 <TextField

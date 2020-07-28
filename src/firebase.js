@@ -20,18 +20,18 @@ class Firebase {
         this.db = app.firestore();
     }
 
-    login(email, password) {
+    async login(email, password) {
         ///REMEMBER: this returns a "promise" 
         ///-> Like how futures/streams work in 
         ///async functions for DART.
-        return this.auth.signInWithEmailAndPassword(email, password);
+        return await this.auth.signInWithEmailAndPassword(email, password);
     }
 
-    logout() {
-        return this.auth.signOut();
+    async logout() {
+        return await this.auth.signOut();
     }
 
-    async isInitialized() {
+    isInitialized() {
         //todo: see how promises work compared to futures
         return new Promise(resolve => { this.auth.onAuthStateChanged(resolve) });
     }

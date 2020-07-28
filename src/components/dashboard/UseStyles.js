@@ -7,6 +7,8 @@ const useStyles = (theme) => ({
     square: {
         color: theme.palette.getContrastText(red[500]),
         backgroundColor: red[500],
+        width:80, 
+        height: 80
     },
     heading: {
         display: "inline"
@@ -23,6 +25,19 @@ const useStyles = (theme) => ({
     centre: {
         left: "50%",
         marginRight: "- 50%"
+    },
+    circleStyle: {
+        textAlign: "center",
+        padding: 10,
+        margin: 20,
+        display: "inline-block",
+        backgroundColor: "red",
+        borderRadius: "50%",
+        width: 30,
+        height: 30,
+    }, 
+    inlineDisplay : {
+        display: "inline-block"
     }
 });
 
