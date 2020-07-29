@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
     },
     whiteColor: {
         color: "#FFFFFF"
+    }, 
+    link: {
+        textDecoration: "none"
     }
 }));
 
@@ -53,13 +56,13 @@ const DashDrawer = (props) => {
         >
             <Paper className={classes.paper}>
                 <List>
-                    <Link to="/dash">
+                    <Link to="/dash" className={classes.link}>
                         <ListItem button key="home" className={classes.whiteColor}>
                             <ListItemIcon><HomeIcon className={classes.whiteColor} /></ListItemIcon>
                             <ListItemText>Home</ListItemText>
                         </ListItem>
                     </Link>
-                    <Link to="/editusers">
+                    <Link to="/editusers" className={classes.link}>
                         <ListItem button key="userDash" className={classes.whiteColor}>
                             <ListItemIcon><AccountCircleIcon className={classes.whiteColor} /></ListItemIcon>
                             <ListItemText>Manage Users</ListItemText>
@@ -73,7 +76,7 @@ const DashDrawer = (props) => {
                         <ListItemIcon><ForumIcon className={classes.whiteColor} /></ListItemIcon>
                         <ListItemText>Message Clients</ListItemText>
                     </ListItem>
-                    <Link to="/" onClick={() => handleSignOut()}>
+                    <Link to="/" onClick={() => handleSignOut()} className={classes.link}>
                         <ListItem button key="signout" className={classes.whiteColor}>
                             <ListItemIcon><ExitToAppIcon className={classes.whiteColor} /></ListItemIcon>
                             <ListItemText>Sign Out</ListItemText>

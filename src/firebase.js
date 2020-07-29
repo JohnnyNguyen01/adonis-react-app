@@ -71,6 +71,14 @@ class Firebase {
         });
         return exerciseList;
     }
+
+    async createWorkoutDoc(coachID, clientID){
+        await app.firestore().collection("workouts").doc().set({
+            coachID: coachID,
+            dateCreated: new Date(),
+            userID: clientID,
+        });
+    }
 }
 
 export default new Firebase();

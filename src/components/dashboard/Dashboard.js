@@ -19,6 +19,7 @@ class Dashboard extends React.Component {
         exerciseBlockList: [],
         selectedDay: 1,
         startDate: new Date(),
+        cycleLength: 0,
     }
 
     componentDidMount() {
@@ -50,8 +51,17 @@ class Dashboard extends React.Component {
 
     handleStartDateChange = (date) => this.setState({ startDate: date })
 
+    handleCycleLengthTFChange = (num) => this.setState({cycleLength: num});
+
+    handleSubmitButton = () => {
+        let clientDoc = this.state.currentClient;
+        let clientData = clientDoc.data();
+        //console.log(clientDoc.id);
+        Firebase.createWorkoutDoc(null,null,null,clientDoc.id);
+    }
+
     render() {
-        console.log(this.state.startDate);
+        console.log(this.state.cycleLength);
         const { classes } = this.props;
         const selectUserOptions = this.state.userDocList.map((doc) => ({
             value: doc.id,
@@ -63,7 +73,7 @@ class Dashboard extends React.Component {
                     <div>
                         <Typography>Exercise {index + 1}</Typography>
                     </div>
-                    <ExerciseBlock />
+                    <ExerciseBlock clientDoc={this.state.currentClient}/>
                 </div>);
         });
         return (
@@ -91,7 +101,9 @@ class Dashboard extends React.Component {
                                     onChange={(date) => { this.handleStartDateChange(date) }} />
                             </MuiPickersUtilsProvider>
                             <TextField 
+                            onChange={(e) => this.handleCycleLengthTFChange(e.target.value)}
                             style={{marginLeft: 5}}
+                            placeholder={this.state.cycleLength.toString()}
                             label="Microcycle length"/>
                         </div>
                         <div className={classes.marginTop}>
@@ -122,6 +134,13 @@ class Dashboard extends React.Component {
                                 className={`${classes.marginTop} ${classes.button}`}
                                 variant="contained"
                                 onClick={() => this.handleAddNewExerciseBtn()}>Add new Exercise
+                            </Button>
+                            <Button
+                            onClick={() => this.handleSubmitButton()}
+                            variant="contained"
+                            className={`${classes.marginTop} ${classes.button}`}
+                            style={{backgroundColor: "LimeGreen", marginLeft: 12}}>
+                                Publish Workout
                             </Button>
                             <Pagination
                                 className={`${classes.marginTop} ${classes.centre}`}
