@@ -23,15 +23,15 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount() {
-        if (Firebase.getCurrentUser == null) {
-            console.log(Firebase.auth.currentUser);
-            alert("Please log in my guy, don't be a douche");
-            this.props.history.replace('/');
-        }
+        Firebase.getCurrentUser().then((value) => {
+            if (value === null) {
+                alert("Please log in before accessing this page");
+                this.props.history.replace("/");
+            }
+        });
         const fetchUsers = async () => {
             this.setState({ userDocList: await Firebase.getUserListAsDoc() });
         }
-
         fetchUsers();
     }
 
@@ -51,17 +51,16 @@ class Dashboard extends React.Component {
 
     handleStartDateChange = (date) => this.setState({ startDate: date })
 
-    handleCycleLengthTFChange = (num) => this.setState({cycleLength: num});
+    handleCycleLengthTFChange = (num) => this.setState({ cycleLength: num });
 
     handleSubmitButton = () => {
         let clientDoc = this.state.currentClient;
         let clientData = clientDoc.data();
         //console.log(clientDoc.id);
-        Firebase.createWorkoutDoc(null,null,null,clientDoc.id);
+        Firebase.createNewWorkoutDoc(null, null, null, clientDoc.id);
     }
 
     render() {
-        console.log(this.state.cycleLength);
         const { classes } = this.props;
         const selectUserOptions = this.state.userDocList.map((doc) => ({
             value: doc.id,
@@ -73,7 +72,7 @@ class Dashboard extends React.Component {
                     <div>
                         <Typography>Exercise {index + 1}</Typography>
                     </div>
-                    <ExerciseBlock clientDoc={this.state.currentClient}/>
+                    <ExerciseBlock clientDoc={this.state.currentClient} />
                 </div>);
         });
         return (
@@ -100,11 +99,11 @@ class Dashboard extends React.Component {
                                     value={this.state.startDate}
                                     onChange={(date) => { this.handleStartDateChange(date) }} />
                             </MuiPickersUtilsProvider>
-                            <TextField 
-                            onChange={(e) => this.handleCycleLengthTFChange(e.target.value)}
-                            style={{marginLeft: 5}}
-                            placeholder={this.state.cycleLength.toString()}
-                            label="Microcycle length"/>
+                            <TextField
+                                onChange={(e) => this.handleCycleLengthTFChange(e.target.value)}
+                                style={{ marginLeft: 5 }}
+                                placeholder={this.state.cycleLength.toString()}
+                                label="Microcycle length" />
                         </div>
                         <div className={classes.marginTop}>
                             <div>
@@ -136,10 +135,10 @@ class Dashboard extends React.Component {
                                 onClick={() => this.handleAddNewExerciseBtn()}>Add new Exercise
                             </Button>
                             <Button
-                            onClick={() => this.handleSubmitButton()}
-                            variant="contained"
-                            className={`${classes.marginTop} ${classes.button}`}
-                            style={{backgroundColor: "LimeGreen", marginLeft: 12}}>
+                                onClick={() => this.handleSubmitButton()}
+                                variant="contained"
+                                className={`${classes.marginTop} ${classes.button}`}
+                                style={{ backgroundColor: "LimeGreen", marginLeft: 12 }}>
                                 Publish Workout
                             </Button>
                             <Pagination
@@ -155,3 +154,16 @@ class Dashboard extends React.Component {
 }
 
 export default withStyles(useStyles)(Dashboard);
+
+/*
+ * handleAddExerciseBtn:
+ *  1. check if the current/latest workout exists.
+ *  exists ? set it's repeat boolean to false
+ *
+ *  2. create new workout document: UID, Date Created, coachID, startDate,
+ *  repeat true
+ *
+ *  3.Add Each Exercise into a new day Doc for the "Days" collection
+ *   set dates for only that week
+ *
+ */

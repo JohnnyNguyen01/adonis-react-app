@@ -72,7 +72,7 @@ class Firebase {
         return exerciseList;
     }
 
-    async createWorkoutDoc(coachID, clientID){
+    async createNewWorkoutDoc(coachID, clientID){
         await app.firestore().collection("workouts").doc().set({
             coachID: coachID,
             dateCreated: new Date(),

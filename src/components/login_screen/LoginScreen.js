@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import './LoginScreen.css';
 import { Button } from "@material-ui/core";
 import { TextField } from "@material-ui/core";
 import { Paper } from "@material-ui/core";
 import Firebase from "../../firebase";
+import { UserContext } from '../providers/UserContext';
 
 const LoginScreen = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [emailIsValid, setEmailIsValid] = useState(false);
-
+  
     const onLogin = async () => {
         try {
+            
             await Firebase.login(email, password);
             props.history.replace("/dash");
         } catch (error) {
