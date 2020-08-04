@@ -12,7 +12,7 @@ import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns"
 import { UserContext } from "../providers/UserContext";
 
-const Dashboard = () => {
+const Dashboard = ({history}) => {
     const [userDocList, setUserDocList] = useState([]);
     const [currentClient, setCurrentClient] = useState(null);
     const [exerciseBlockList, setExerciseBlockList] = useState([]);
@@ -23,41 +23,39 @@ const Dashboard = () => {
     const classes = useStyles();
 
     useEffect(() => {
+        if(userContext.currentUser ===null){
+            alert("please login before accessing this page");
+            history.replace("/");
+        }
         const fetchUsers = async () => {
-            setUserDocList(await Firebase.getUserListAsDoc() );
+            setUserDocList(await Firebase.getUserListAsDoc());
         }
         fetchUsers();
-        console.log(userContext);
-    },[]);
+    }, []);
 
     const handleUserDropDownOnChange = (docID) => {
         userDocList.forEach((document) => {
             if (docID === document.id)
-                setCurrentClient(document );
+                setCurrentClient(document);
         });
     }
 
     const handleAddNewExerciseBtn = () => {
-        // this.setState(prevState => {
-        //     var newElement = prevState.exerciseBlockList.length;
-        //     return { exerciseBlockList: prevState.exerciseBlockList.concat(newElement) }
-        // })
         var currentLength = cycleLength;
-        setExerciseBlockList( currentLength + 1 );
+        setExerciseBlockList(currentLength + 1);
     }
 
-    const handleStartDateChange = (date) => setStartDate( date )
+    const handleStartDateChange = (date) => setStartDate(date)
 
-    const handleCycleLengthTFChange = (num) => setCycleLength(  num );
+    const handleCycleLengthTFChange = (num) => setCycleLength(num);
 
     const handleSubmitButton = () => {
         let clientDoc = currentClient;
         //let clientData = clientDoc.data();
-        //console.log(clientDoc.id);
-        Firebase.createNewWorkoutDoc(null, null, null, clientDoc.id);
+        Firebase.createNewWorkoutDoc(userContext.currentUser.uid, clientDoc.id);
     }
 
-     const selectUserOptions = userDocList.map((doc) => ({
+    const selectUserOptions = userDocList.map((doc) => ({
         value: doc.id,
         label: doc.data().username
     }));
@@ -141,7 +139,7 @@ const Dashboard = () => {
                         <Pagination
                             className={`${classes.marginTop} ${classes.centre}`}
                             count={7}
-                            onChange={(event, page) => { setSelectedDay( page ) }} />
+                            onChange={(event, page) => { setSelectedDay(page) }} />
                     </div>
                 </Grid>
             </Grid>

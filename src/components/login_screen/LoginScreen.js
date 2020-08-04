@@ -22,7 +22,7 @@ const LoginScreen = (props) => {
             alert(error.message);
         }
     }
-    console.log(currentUser);
+
     return (
         <div className="background">
             <Paper elevation={13} className="card">
