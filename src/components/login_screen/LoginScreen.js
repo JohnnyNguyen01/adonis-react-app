@@ -4,29 +4,32 @@ import { Button } from "@material-ui/core";
 import { TextField } from "@material-ui/core";
 import { Paper } from "@material-ui/core";
 import Firebase from "../../firebase";
-import { UserContext } from '../providers/UserContext';
+import {UserContext} from '../providers/UserContext';
 
 const LoginScreen = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-  
+    const {currentUser, setCurrentUser} = useContext(UserContext);
+
     const onLogin = async () => {
         try {
-            
             await Firebase.login(email, password);
+            await Firebase.auth.onAuthStateChanged((user) => {
+                if (user) { setCurrentUser(user) }
+            });
             props.history.replace("/dash");
         } catch (error) {
             alert(error.message);
         }
     }
-
+    console.log(currentUser);
     return (
         <div className="background">
             <Paper elevation={13} className="card">
-                <img 
-                src={require("../../assets/images/adonis_logo.png")} 
-                alt="adonis_logo"
-                className="img"/>
+                <img
+                    src={require("../../assets/images/adonis_logo.png")}
+                    alt="adonis_logo"
+                    className="img" />
                 <form className="form">
                     <div className="bottom-margin">
                         <TextField

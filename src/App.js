@@ -1,14 +1,19 @@
-import React, { createContext } from 'react';
+import React, { useState, useMemo } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LoginScreen from "./components/login_screen/LoginScreen";
 import Dashboard from './components/dashboard/Dashboard';
 import { CircularProgress } from '@material-ui/core';
 import EditUserScreen from './components/edit_users_screen/EditUsersScreen';
-const Context = createContext('hello');
+import { UserContext } from './components/providers/UserContext';
 
 const App = () => {
-    return (
-        <Context.Provider>
+
+    const [currentUser, setCurrentUser] = useState(null);
+    const currentUserProviderValues =
+        useMemo(() => ({ currentUser, setCurrentUser }), [currentUser, setCurrentUser]);
+    
+        return (
+        <UserContext.Provider value={currentUserProviderValues}>
             <Router>
                 <Switch>
                     <Route exact path="/" component={LoginScreen} />
@@ -16,7 +21,7 @@ const App = () => {
                     <Route exact path="/editusers" component={EditUserScreen} />
                 </Switch>
             </Router>
-        </Context.Provider>);
+        </UserContext.Provider>);
 }
 
 export default App;

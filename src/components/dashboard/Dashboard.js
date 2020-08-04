@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Firebase from "../../firebase";
 import DashDrawer from "../common/drawer/Drawer";
 import { Grid } from "@material-ui/core";
@@ -10,6 +10,7 @@ import useStyles from "./UseStyles";
 import OutlinedInputLabel from "../common/OutlinedInputLabel/OutlinedInputLabel";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns"
+import { UserContext } from "../providers/UserContext";
 
 const Dashboard = () => {
     const [userDocList, setUserDocList] = useState([]);
@@ -18,7 +19,7 @@ const Dashboard = () => {
     const [selectedDay, setSelectedDay] = useState(1);
     const [startDate, setStartDate] = useState(new Date());
     const [cycleLength, setCycleLength] = useState(0);
-
+    const userContext = useContext(UserContext);
     const classes = useStyles();
 
     useEffect(() => {
@@ -26,6 +27,7 @@ const Dashboard = () => {
             setUserDocList(await Firebase.getUserListAsDoc() );
         }
         fetchUsers();
+        console.log(userContext);
     },[]);
 
     const handleUserDropDownOnChange = (docID) => {
@@ -55,7 +57,6 @@ const Dashboard = () => {
         Firebase.createNewWorkoutDoc(null, null, null, clientDoc.id);
     }
 
-    console.log(userDocList);
      const selectUserOptions = userDocList.map((doc) => ({
         value: doc.id,
         label: doc.data().username
