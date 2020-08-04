@@ -1,11 +1,12 @@
 import { red } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core';
 
-const useStyles = (theme) => ({
+const useStyles = makeStyles({
     textfield: {
         width: "85%"
     },
     square: {
-        color: theme.palette.getContrastText(red[500]),
+        color: red[500],
         backgroundColor: red[500],
         width:80, 
         height: 80
