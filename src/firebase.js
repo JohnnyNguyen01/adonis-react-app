@@ -31,11 +31,6 @@ class Firebase {
         return await this.auth.signOut();
     }
 
-    isInitialized() {
-        //todo: see how promises work compared to futures
-        return new Promise(resolve => { this.auth.onAuthStateChanged(resolve) });
-    }
-
     async currentUserExists() {
         return this.auth.currentUser.uid ? true : false;
     }
@@ -72,12 +67,28 @@ class Firebase {
         return exerciseList;
     }
 
-    async createNewWorkoutDoc(coachID, clientID){
+    async createNewWorkoutDoc(coachID, clientID) {
         await app.firestore().collection("workouts").doc().set({
             coachID: coachID,
-            dateCreated: new Date(),
+            'date created': new Date(),
             userID: clientID,
         });
+    }
+
+    //grab latest user workout
+    async getLatestWorkoutForUser(uid) {
+        // app.firestore().collection("workouts").get().then((snapshot) => {
+        //     snapshot.forEach(doc => {
+        //         var userDocs = [];
+        //         if (doc.data().userID === uid) {
+        //             userDocs.push(doc);
+        //         }
+        //         return userDocs;
+        //     });
+        // });
+        return await app.firestore().collection("workouts")
+            .where("userID", "==", uid).orderBy("date created").limit(1)
+            .get().then(snapshot => snapshot.forEach(workoutDoc => { return workoutDoc.data() }));
     }
 }
 

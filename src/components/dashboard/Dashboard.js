@@ -12,7 +12,7 @@ import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns"
 import { UserContext } from "../providers/UserContext";
 
-const Dashboard = ({history}) => {
+const Dashboard = ({ history }) => {
     const [userDocList, setUserDocList] = useState([]);
     const [currentClient, setCurrentClient] = useState(null);
     const [exerciseBlockList, setExerciseBlockList] = useState([]);
@@ -23,7 +23,7 @@ const Dashboard = ({history}) => {
     const classes = useStyles();
 
     useEffect(() => {
-        if(userContext.currentUser ===null){
+        if (userContext.currentUser === null) {
             alert("please login before accessing this page");
             history.replace("/");
         }
@@ -33,6 +33,8 @@ const Dashboard = ({history}) => {
         fetchUsers();
     }, []);
 
+    console.log(exerciseBlockList);
+
     const handleUserDropDownOnChange = (docID) => {
         userDocList.forEach((document) => {
             if (docID === document.id)
@@ -41,8 +43,7 @@ const Dashboard = ({history}) => {
     }
 
     const handleAddNewExerciseBtn = () => {
-        var currentLength = cycleLength;
-        setExerciseBlockList(currentLength + 1);
+        setExerciseBlockList(exerciseBlockList.concat(exerciseBlockList.length + 1));
     }
 
     const handleStartDateChange = (date) => setStartDate(date)
@@ -50,9 +51,22 @@ const Dashboard = ({history}) => {
     const handleCycleLengthTFChange = (num) => setCycleLength(num);
 
     const handleSubmitButton = () => {
-        let clientDoc = currentClient;
+        /*
+        * handleAddExerciseBtn:
+        *  1. check if the current/latest workout exists.
+        *  exists ? set it's repeat boolean to false
+        *
+        *  2. create new workout document: UID, Date Created, coachID, startDate,
+        *  repeat true
+        *
+        *  3.Add Each Exercise into a new day Doc for the "Days" collection
+        *   set dates for only that week
+        *
+        */
         //let clientData = clientDoc.data();
-        Firebase.createNewWorkoutDoc(userContext.currentUser.uid, clientDoc.id);
+        var latestWorkout = Firebase.getLatestWorkoutForUser(currentClient.id);
+        console.log(latestWorkout);
+        //Firebase.createNewWorkoutDoc(userContext.currentUser.uid, clientDoc.id);
     }
 
     const selectUserOptions = userDocList.map((doc) => ({
@@ -64,7 +78,7 @@ const Dashboard = ({history}) => {
         return (
             <div className={`${classes.marginTop}`}>
                 <div>
-                    <Typography>Exercise {index + 1}</Typography>
+                    <Typography>Exercise {block}</Typography>
                 </div>
                 <ExerciseBlock clientDoc={currentClient} />
             </div>);
@@ -149,15 +163,3 @@ const Dashboard = ({history}) => {
 
 export default withStyles(useStyles)(Dashboard);
 
-/*
- * handleAddExerciseBtn:
- *  1. check if the current/latest workout exists.
- *  exists ? set it's repeat boolean to false
- *
- *  2. create new workout document: UID, Date Created, coachID, startDate,
- *  repeat true
- *
- *  3.Add Each Exercise into a new day Doc for the "Days" collection
- *   set dates for only that week
- *
- */
