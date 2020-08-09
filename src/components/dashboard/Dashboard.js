@@ -79,7 +79,7 @@ const Dashboard = ({ history }) => {
 
     const renderExerciseBlocks = exerciseBlockList.map((block, index) => {
         return (
-            <div className={`${classes.marginTop}`}>
+            <div className={`${classes.marginTop}`} key={index}>
                 <div>
                     <Typography>Exercise {block}</Typography>
                 </div>
