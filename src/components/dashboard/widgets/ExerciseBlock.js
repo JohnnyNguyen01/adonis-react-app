@@ -35,8 +35,8 @@ const ExerciseBlock = (props) => {
     const [clientDoc, setClientDoc] = useState(props.clientDoc);
     const [exerciseNotes, setExerciseNotes] = useState("");
     const [setsObject, setSetsObject] = useState({});
-    const [repScheme, setRepScheme] = useState({ });
-
+    const [chosenRepScheme, setChosenRepScheme] = useState();
+    const [exerciseBlockOutput, setExerciseBlockOutput] = useState({});
 
     useEffect(() => {
         const getExerciseList = async () => {
@@ -44,9 +44,18 @@ const ExerciseBlock = (props) => {
         }
         setSetsList(renderSetsOptions);
         getExerciseList();
-    }, []);
+        setExerciseBlockOutput({
+            ...exerciseBlockOutput,
+            exerciseName: chosenExercise != null ? chosenExercise.exerciseName : null,
+            exerciseURL: chosenExercise != null ? chosenExercise.exerciseURL : null,
+            description: exerciseNotes != null ? exerciseNotes : "",
+            repType: chosenRepScheme != null? chosenRepScheme : null,
+            sets: setsObject != null ? setsObject : null
+        });
+    }, [chosenExercise, exerciseNotes, setsObject, chosenRepScheme ]);
 
-
+    console.log(exerciseBlockOutput);
+    
     //mapping of exercise options
     const exerciseOptions = exerciseList.map(
         exercise => ({ value: exercise.exerciseName, label: exercise.exerciseName })
@@ -59,6 +68,7 @@ const ExerciseBlock = (props) => {
 
     const repTypeOptions = [{ value: "reps", label: "Reps" }, { value: "secs", label: "Seconds" }];
 
+    //reenderSetsOptions for sets Table
     function renderSetsOptions() {
         var setsList = [];
         for (var i = 1; i < 13; i++) {
@@ -80,19 +90,14 @@ const ExerciseBlock = (props) => {
 
     const handleRepsDropDown = (type) => {
         setRepType(type);
-        setRepScheme({ ...repScheme, repType: repType });
-    }
-    console.log(setsObject);
-
-    const setObjectState = (value) => {
-
+        setChosenRepScheme(type);
     }
 
-    function renderTableCellsAndSetsState() {
+    //todo: refactor setState
+    function renderTableCells() {
         var rowList = []
         for (var i = 1; i <= setAmount; i++) rowList.push(i);
         return rowList.map((set, index) => {
-            var setObject = {}
             return (
                 <TableRow key={index}>
                     <TableCell>
@@ -101,20 +106,44 @@ const ExerciseBlock = (props) => {
                     <TableCell>
                         <TextField
                             type="number"
-                            onChange={e => setSetsObject(prevState => ({ ...prevState, [`${set}`]: { ...setsObject[`${set}`] ,reps: e.target.value } }))} />
+                            onChange={e => setSetsObject(prevState => (
+                                {
+                                    ...prevState,
+                                    [`${set}`]: {
+                                        ...setsObject[`${set}`],
+                                        reps: e.target.value
+                                    }
+                                })
+                            )} />
                     </TableCell>
                     <TableCell>
                         <TextField
                             type="number"
-                            onChange={e => setSetsObject(prevState => ({ ...prevState, [`${set}`]: { ...setsObject[`${set}`] ,rpe: e.target.value } })) } />
+                            onChange={e => setSetsObject(prevState => (
+                                {
+                                    ...prevState,
+                                    [`${set}`]: {
+                                        ...setsObject[`${set}`],
+                                        rpe: e.target.value
+                                    }
+                                })
+                            )} />
                     </TableCell>
                     <TableCell>
                         <TextField
                             type="number"
-                            onChange={e => setSetsObject(prevState => ({ ...prevState, [`${set}`]: { ...setsObject[`${set}`] ,weight: e.target.value } }))} />
+                            onChange={e => setSetsObject(prevState => (
+                                {
+                                    ...prevState,
+                                    [`${set}`]: {
+                                        ...setsObject[`${set}`],
+                                        weight: e.target.value
+                                    }
+                                })
+                            )} />
                     </TableCell>
                 </TableRow>
-            )
+            );
         })
     }
 
@@ -173,7 +202,7 @@ const ExerciseBlock = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {renderTableCellsAndSetsState()}
+                                {renderTableCells()}
                             </TableBody>
                         </Table>
                     </TableContainer>
