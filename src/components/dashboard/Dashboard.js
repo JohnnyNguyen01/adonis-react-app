@@ -19,11 +19,13 @@ const Dashboard = ({ history }) => {
     const [selectedDay, setSelectedDay] = useState(1);
     const [startDate, setStartDate] = useState(new Date());
     const [cycleLength, setCycleLength] = useState(0);
-    const [workoutExerciseList, setWorkoutExerciseList] = useState([]);
+    const [workoutExerciseListObj, setWorkoutExerciseListObj] = useState({});
 
     const userContext = useContext(UserContext);
     const classes = useStyles();
-    console.log(workoutExerciseList);
+
+    console.table(workoutExerciseListObj);
+
     useEffect(() => {
         //todo: un-comment below upon deployment
         // if (userContext.currentUser === null) {
@@ -82,9 +84,10 @@ const Dashboard = ({ history }) => {
                     <Typography>Exercise {block}</Typography>
                 </div>
                 <ExerciseBlock
+                    exerciseNumber={block}
                     clientDoc={currentClient}
-                    setWorkoutExerciseListHook={setWorkoutExerciseList}
-                    workoutExerciseList={workoutExerciseList} />
+                    setWorkoutExerciseListHook={setWorkoutExerciseListObj}
+                    workoutExerciseList={workoutExerciseListObj} />
             </div>);
     });
 

@@ -49,13 +49,13 @@ const ExerciseBlock = (props) => {
             exerciseName: chosenExercise != null ? chosenExercise.exerciseName : null,
             exerciseURL: chosenExercise != null ? chosenExercise.exerciseURL : null,
             description: exerciseNotes != null ? exerciseNotes : "",
-            repType: chosenRepScheme != null? chosenRepScheme : null,
+            repType: chosenRepScheme != null ? chosenRepScheme : null,
             sets: setsObject != null ? setsObject : null
         });
-        props.setWorkoutExerciseListHook(props.workoutExerciseList.concat(exerciseBlockOutput));
+        props.setWorkoutExerciseListHook({ ...props.workoutExerciseList, [`${props.exerciseNumber}`]: exerciseBlockOutput });
 
-    }, [chosenExercise, exerciseNotes, setsObject, chosenRepScheme ]);
-    
+    }, [chosenExercise, exerciseNotes, setsObject, chosenRepScheme]);
+
     //mapping of exercise options
     const exerciseOptions = exerciseList.map(
         exercise => ({ value: exercise.exerciseName, label: exercise.exerciseName })
@@ -93,6 +93,18 @@ const ExerciseBlock = (props) => {
         setChosenRepScheme(type);
     }
 
+    const handleTableCellTextField = (set, value, objectKey) => {
+        setSetsObject(prevState => (
+            {
+                ...prevState,
+                [`${set}`]: {
+                    ...setsObject[`${set}`],
+                    [`${objectKey}`]: value
+                }
+            })
+        )
+    }
+
     //todo: refactor setState
     function renderTableCells() {
         var rowList = []
@@ -106,41 +118,17 @@ const ExerciseBlock = (props) => {
                     <TableCell>
                         <TextField
                             type="number"
-                            onChange={e => setSetsObject(prevState => (
-                                {
-                                    ...prevState,
-                                    [`${set}`]: {
-                                        ...setsObject[`${set}`],
-                                        reps: e.target.value
-                                    }
-                                })
-                            )} />
+                            onChange={e => handleTableCellTextField(set, e.target.value, "reps")} />
                     </TableCell>
                     <TableCell>
                         <TextField
                             type="number"
-                            onChange={e => setSetsObject(prevState => (
-                                {
-                                    ...prevState,
-                                    [`${set}`]: {
-                                        ...setsObject[`${set}`],
-                                        rpe: e.target.value
-                                    }
-                                })
-                            )} />
+                            onChange={e => handleTableCellTextField(set, e.target.value, "rpe")} />
                     </TableCell>
                     <TableCell>
                         <TextField
                             type="number"
-                            onChange={e => setSetsObject(prevState => (
-                                {
-                                    ...prevState,
-                                    [`${set}`]: {
-                                        ...setsObject[`${set}`],
-                                        weight: e.target.value
-                                    }
-                                })
-                            )} />
+                            onChange={e => handleTableCellTextField(set, e.target.value, "weight")} />
                     </TableCell>
                 </TableRow>
             );
