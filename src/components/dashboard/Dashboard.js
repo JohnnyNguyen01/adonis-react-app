@@ -23,7 +23,7 @@ const Dashboard = ({ history }) => {
 
     const userContext = useContext(UserContext);
     const classes = useStyles();
-
+    console.log(workoutExerciseList);
     useEffect(() => {
         //todo: un-comment below upon deployment
         // if (userContext.currentUser === null) {
@@ -35,8 +35,6 @@ const Dashboard = ({ history }) => {
         }
         fetchUsers();
     }, []);
-
-    console.log(exerciseBlockList);
 
     const handleUserDropDownOnChange = (docID) => {
         userDocList.forEach((document) => {
@@ -85,7 +83,7 @@ const Dashboard = ({ history }) => {
                 </div>
                 <ExerciseBlock
                     clientDoc={currentClient}
-                    setWorkoutExerciseHooks={setWorkoutExerciseList}
+                    setWorkoutExerciseListHook={setWorkoutExerciseList}
                     workoutExerciseList={workoutExerciseList} />
             </div>);
     });

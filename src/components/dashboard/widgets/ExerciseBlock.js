@@ -52,9 +52,9 @@ const ExerciseBlock = (props) => {
             repType: chosenRepScheme != null? chosenRepScheme : null,
             sets: setsObject != null ? setsObject : null
         });
-    }, [chosenExercise, exerciseNotes, setsObject, chosenRepScheme ]);
+        props.setWorkoutExerciseListHook(props.workoutExerciseList.concat(exerciseBlockOutput));
 
-    console.log(exerciseBlockOutput);
+    }, [chosenExercise, exerciseNotes, setsObject, chosenRepScheme ]);
     
     //mapping of exercise options
     const exerciseOptions = exerciseList.map(
