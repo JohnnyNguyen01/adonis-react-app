@@ -24,7 +24,7 @@ class Firebase {
         ///REMEMBER: this returns a "promise" 
         ///-> Like how futures/streams work in 
         ///async functions for DART.
-        return await this.auth.signInWithEmailAndPassword(email, password);
+        return await this.auth.signInWithEmailAndPassword(email, password); 
     }
 
     async logout() {

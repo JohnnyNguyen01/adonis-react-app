@@ -25,12 +25,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const ExerciseBlock = () => {
+const ExerciseBlock = (props) => {
+    //props.setWorkoutExerciseList()
     const [exerciseList, setExerciseList] = useState([]);
     const [chosenExercise, setChosenExercise] = useState(null);
     const [setsList, setSetsList] = useState([]);
     const [setAmount, setSetAmount] = useState(0);
     const [repType, setRepType] = useState("reps");
+    const [clientDoc, setClientDoc] = useState(props.clientDoc);
+    const [exerciseNotes, setExerciseNotes] = useState("");
+    const [setsObject, setSetsObject] = useState({});
+    const [repScheme, setRepScheme] = useState({ });
+
 
     useEffect(() => {
         const getExerciseList = async () => {
@@ -40,10 +46,13 @@ const ExerciseBlock = () => {
         getExerciseList();
     }, []);
 
+
+    //mapping of exercise options
     const exerciseOptions = exerciseList.map(
         exercise => ({ value: exercise.exerciseName, label: exercise.exerciseName })
     );
 
+    //mapping of setsList for dropdown
     const setsOptions = setsList.map(
         set => ({ value: set, label: `${set} sets` })
     );
@@ -65,26 +74,46 @@ const ExerciseBlock = () => {
         });
     }
 
-    function renderTableCells() {
+    const handleExerciseNotesTF = (stringValue) => {
+        setExerciseNotes(stringValue);
+    }
+
+    const handleRepsDropDown = (type) => {
+        setRepType(type);
+        setRepScheme({ ...repScheme, repType: repType });
+    }
+    console.log(setsObject);
+
+    const setObjectState = (value) => {
+
+    }
+
+    function renderTableCellsAndSetsState() {
         var rowList = []
         for (var i = 1; i <= setAmount; i++) rowList.push(i);
         return rowList.map((set, index) => {
+            var setObject = {}
             return (
                 <TableRow key={index}>
                     <TableCell>
                         {`Set ${set}`}
                     </TableCell>
                     <TableCell>
-                        <TextField />
+                        <TextField
+                            type="number"
+                            onChange={e => setSetsObject(prevState => ({ ...prevState, [`${set}`]: { ...setsObject[`${set}`] ,reps: e.target.value } }))} />
                     </TableCell>
                     <TableCell>
-                        <TextField />
+                        <TextField
+                            type="number"
+                            onChange={e => setSetsObject(prevState => ({ ...prevState, [`${set}`]: { ...setsObject[`${set}`] ,rpe: e.target.value } })) } />
                     </TableCell>
                     <TableCell>
-                        <TextField />
+                        <TextField
+                            type="number"
+                            onChange={e => setSetsObject(prevState => ({ ...prevState, [`${set}`]: { ...setsObject[`${set}`] ,weight: e.target.value } }))} />
                     </TableCell>
                 </TableRow>
-
             )
         })
     }
@@ -109,6 +138,7 @@ const ExerciseBlock = () => {
                             defaultValue=""
                             variant="filled"
                             className={classes.textfield}
+                            onChange={e => handleExerciseNotesTF(e.target.value)}
                         />
                     </div>
                     {chosenExercise != null ?
@@ -135,7 +165,7 @@ const ExerciseBlock = () => {
                                         <OutlinedInputLabel
                                             inputlabel="Reps"
                                             options={repTypeOptions}
-                                            onChange={event => setRepType(event.target.value)}
+                                            onChange={event => handleRepsDropDown(event.target.value)}
                                         />
                                     </TableCell>
                                     <TableCell>RPE</TableCell>
@@ -143,7 +173,7 @@ const ExerciseBlock = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {renderTableCells()}
+                                {renderTableCellsAndSetsState()}
                             </TableBody>
                         </Table>
                     </TableContainer>

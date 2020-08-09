@@ -19,14 +19,17 @@ const Dashboard = ({ history }) => {
     const [selectedDay, setSelectedDay] = useState(1);
     const [startDate, setStartDate] = useState(new Date());
     const [cycleLength, setCycleLength] = useState(0);
+    const [workoutExerciseList, setWorkoutExerciseList] = useState([]);
+
     const userContext = useContext(UserContext);
     const classes = useStyles();
 
     useEffect(() => {
-        if (userContext.currentUser === null) {
-            alert("please login before accessing this page");
-            history.replace("/");
-        }
+        //todo: un-comment below upon deployment
+        // if (userContext.currentUser === null) {
+        //     alert("please login before accessing this page");
+        //     history.replace("/");
+        // }
         const fetchUsers = async () => {
             setUserDocList(await Firebase.getUserListAsDoc());
         }
@@ -80,7 +83,10 @@ const Dashboard = ({ history }) => {
                 <div>
                     <Typography>Exercise {block}</Typography>
                 </div>
-                <ExerciseBlock clientDoc={currentClient} />
+                <ExerciseBlock
+                    clientDoc={currentClient}
+                    setWorkoutExerciseHooks={setWorkoutExerciseList}
+                    workoutExerciseList={workoutExerciseList} />
             </div>);
     });
 
