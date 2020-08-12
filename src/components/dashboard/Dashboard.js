@@ -24,14 +24,12 @@ const Dashboard = ({ history }) => {
     const userContext = useContext(UserContext);
     const classes = useStyles();
 
-    console.table(workoutExerciseListObj);
-
     useEffect(() => {
         //todo: un-comment below upon deployment
-        // if (userContext.currentUser === null) {
-        //     alert("please login before accessing this page");
-        //     history.replace("/");
-        // }
+        if (userContext.currentUser === null) {
+            alert("please login before accessing this page");
+            history.replace("/");
+        }
         const fetchUsers = async () => {
             setUserDocList(await Firebase.getUserListAsDoc());
         }
@@ -53,7 +51,7 @@ const Dashboard = ({ history }) => {
 
     const handleCycleLengthTFChange = (num) => setCycleLength(num);
 
-    const handleSubmitButton = () => {
+    const handleSubmitButton = async () => {
         /*
         * handleAddExerciseBtn:
         *  1. check if the current/latest workout exists.
@@ -66,16 +64,22 @@ const Dashboard = ({ history }) => {
         *   set dates for only that week
         *
         */
-        //let clientData = clientDoc.data();
-        var latestWorkout = Firebase.getLatestWorkoutForUser(currentClient.id);
-        console.log(latestWorkout);
-        //Firebase.createNewWorkoutDoc(userContext.currentUser.uid, clientDoc.id);
+       let clientDoc = currentClient.data();
+        var latestWorkout = await Firebase.getLatestWorkoutForUser(currentClient.id);
+        console.log(latestWorkout.data());
+        if(latestWorkout != null){
+           await latestWorkout.ref.update({repeat: false});
+        }
+        let coachID = userContext.currentUser.uid;
+        Firebase.createNewWorkoutDoc(coachID, currentClient.id);
     }
 
     const selectUserOptions = userDocList.map((doc) => ({
         value: doc.id,
         label: doc.data().username
     }));
+
+    console.log(workoutExerciseListObj);
 
     const renderExerciseBlocks = exerciseBlockList.map((block, index) => {
         return (
@@ -168,5 +172,5 @@ const Dashboard = ({ history }) => {
     );
 }
 
-export default withStyles(useStyles)(Dashboard);
+export default Dashboard;
 

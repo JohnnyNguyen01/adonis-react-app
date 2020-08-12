@@ -24,7 +24,7 @@ class Firebase {
         ///REMEMBER: this returns a "promise" 
         ///-> Like how futures/streams work in 
         ///async functions for DART.
-        return await this.auth.signInWithEmailAndPassword(email, password); 
+        return await this.auth.signInWithEmailAndPassword(email, password);
     }
 
     async logout() {
@@ -74,21 +74,31 @@ class Firebase {
             userID: clientID,
         });
     }
+    //get all user workouts
+    async getAllUserWorkouts(uid) {
+        var workouts = app.firestore().collection("workouts").where("userID", "==", uid);
+        workouts.get().then(querySnapshot => querySnapshot.forEach(doc => doc.data()));
+    }
 
     //grab latest user workout
     async getLatestWorkoutForUser(uid) {
-        // app.firestore().collection("workouts").get().then((snapshot) => {
-        //     snapshot.forEach(doc => {
-        //         var userDocs = [];
-        //         if (doc.data().userID === uid) {
-        //             userDocs.push(doc);
-        //         }
-        //         return userDocs;
-        //     });
-        // });
-        return await app.firestore().collection("workouts")
-            .where("userID", "==", uid).orderBy("date created").limit(1)
-            .get().then(snapshot => snapshot.forEach(workoutDoc => { return workoutDoc.data() }));
+       var userWorkoutList = [];
+       var workoutRefs = await app.firestore().collection("workouts")
+       .where("userID", "==", uid).orderBy("date created").limit(1).get();
+       workoutRefs.forEach(workoutDoc => userWorkoutList.push(workoutDoc));
+       return userWorkoutList[0];
+    }
+
+    //returns every single workout in a list
+    async getAllWorkoutsAsDocList(){
+        var workoutList = [];
+        var workouts = await app.firestore().collection("workouts").get();
+        workouts.forEach(workout => workoutList.push(workout.data()));
+        return workoutList;
+    }
+
+    async updateWorkoutWithRef(docRef, updateObj){
+        await docRef.update(updateObj);
     }
 }
 
