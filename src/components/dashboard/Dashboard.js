@@ -15,26 +15,43 @@ import { UserContext } from "../providers/UserContext";
 const Dashboard = ({ history }) => {
     const [userDocList, setUserDocList] = useState([]);
     const [currentClient, setCurrentClient] = useState(null);
-    const [exerciseBlockList, setExerciseBlockList] = useState([]);
+    const [exerciseBlockListDayOne, setExerciseBlockListDayOne] = useState([]);
+    const [exerciseBlockListDayTwo, setExerciseBlockListDayTwo] = useState([]);
+    const [exerciseBlockListDayThree, setExerciseBlockListDayThree] = useState([]);
+    const [exerciseBlockListDayFour, setExerciseBlockListDayFour] = useState([]);
+    const [exerciseBlockListDayFive, setExerciseBlockListDayFive] = useState([]);
+    const [exerciseBlockListDaySix, setExerciseBlockListDaySix] = useState([]);
+    const [exerciseBlockListDaySeven, setExerciseBlockListDaySeven] = useState([]);
+    const [currentExerciseBlockList, setCurrentExerciseBlockList] = useState({currentBlock:exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne});
     const [selectedDay, setSelectedDay] = useState(1);
     const [startDate, setStartDate] = useState(new Date());
     const [cycleLength, setCycleLength] = useState(0);
     const [workoutExerciseListObj, setWorkoutExerciseListObj] = useState({});
-
     const userContext = useContext(UserContext);
     const classes = useStyles();
 
     useEffect(() => {
         //todo: un-comment below upon deployment
-        if (userContext.currentUser === null) {
-            alert("please login before accessing this page");
-            history.replace("/");
-        }
+        // if (userContext.currentUser === null) {
+        //     alert("please login before accessing this page");
+        //     history.replace("/");
+        // }
         const fetchUsers = async () => {
             setUserDocList(await Firebase.getUserListAsDoc());
         }
-        fetchUsers();
-    }, []);
+        if (userDocList.length === 0) fetchUsers();
+        setCurrentBlockListToSelectedDay();
+    }, [selectedDay,setExerciseBlockListDayOne,exerciseBlockListDayTwo, exerciseBlockListDayThree, exerciseBlockListDayFour, exerciseBlockListDayFive, exerciseBlockListDaySix, exerciseBlockListDaySeven ]);
+    
+    const setCurrentBlockListToSelectedDay = () => {
+        if (selectedDay === 1) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne})
+        else if (selectedDay === 2) setCurrentExerciseBlockList({currentBlock: exerciseBlockListDayTwo, setMethod:  setExerciseBlockListDayTwo})
+        else if (selectedDay === 3) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayThree, setMethod: setExerciseBlockListDayThree})
+        else if (selectedDay === 4) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFour, setMethod: setExerciseBlockListDayFour})
+        else if (selectedDay === 5) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFive, setMethod: setExerciseBlockListDayFive})
+        else if (selectedDay === 6) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySix, setMethod: setExerciseBlockListDaySix})
+        else if (selectedDay === 7) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySeven, setMethod: setExerciseBlockListDaySeven});
+    }
 
     const handleUserDropDownOnChange = (docID) => {
         userDocList.forEach((document) => {
@@ -43,8 +60,13 @@ const Dashboard = ({ history }) => {
         });
     }
 
+    console.log(exerciseBlockListDayOne);
+
     const handleAddNewExerciseBtn = () => {
-        setExerciseBlockList(exerciseBlockList.concat(exerciseBlockList.length + 1));
+        //setExerciseBlockListDayOne(exerciseBlockListDayOne.concat(exerciseBlockListDayOne.length + 1));
+        var currentBlock = currentExerciseBlockList.currentBlock;
+        currentExerciseBlockList.setMethod([...currentBlock, currentBlock.push(currentBlock.length + 1)]);
+        console.log( currentExerciseBlockList.currentBlock);
     }
 
     const handleStartDateChange = (date) => setStartDate(date)
@@ -64,11 +86,11 @@ const Dashboard = ({ history }) => {
         *   set dates for only that week
         *
         */
-       let clientDoc = currentClient.data();
+        let clientDoc = currentClient.data();
         var latestWorkout = await Firebase.getLatestWorkoutForUser(currentClient.id);
         console.log(latestWorkout.data());
-        if(latestWorkout != null){
-           await latestWorkout.ref.update({repeat: false});
+        if (latestWorkout != null) {
+            await latestWorkout.ref.update({ repeat: false });
         }
         let coachID = userContext.currentUser.uid;
         Firebase.createNewWorkoutDoc(coachID, currentClient.id);
@@ -79,9 +101,13 @@ const Dashboard = ({ history }) => {
         label: doc.data().username
     }));
 
-    console.log(workoutExerciseListObj);
+    //console.log(workoutExerciseListObj);
+    /*
+     * 1. On new page, create new exercise blocks 
+     * 2. Assign Exercise Block output to a day -> Day: {dates array, day number, exercises{}: exerciseBlockOutput}
+     */
 
-    const renderExerciseBlocks = exerciseBlockList.map((block, index) => {
+    const renderExerciseBlocks = currentExerciseBlockList.currentBlock.map((block, index) => {
         return (
             <div className={`${classes.marginTop}`} key={index}>
                 <div>
