@@ -27,6 +27,7 @@ const Dashboard = ({ history }) => {
     const [startDate, setStartDate] = useState(new Date());
     const [cycleLength, setCycleLength] = useState(0);
     const [workoutExerciseListObj, setWorkoutExerciseListObj] = useState({});
+    const [allWorkouts, setAllWorkouts] = useState({})
     const userContext = useContext(UserContext);
     const classes = useStyles();
 
@@ -41,16 +42,61 @@ const Dashboard = ({ history }) => {
         }
         if (userDocList.length === 0) fetchUsers();
         setCurrentBlockListToSelectedDay();
-    }, [selectedDay,setExerciseBlockListDayOne,exerciseBlockListDayTwo, exerciseBlockListDayThree, exerciseBlockListDayFour, exerciseBlockListDayFive, exerciseBlockListDaySix, exerciseBlockListDaySeven ]);
+    }, [selectedDay, workoutExerciseListObj ,exerciseBlockListDayOne,exerciseBlockListDayTwo, exerciseBlockListDayThree, exerciseBlockListDayFour, exerciseBlockListDayFive, exerciseBlockListDaySix, exerciseBlockListDaySeven ]);
     
+    console.log(exerciseBlockListDayOne);
+    console.log(exerciseBlockListDayTwo);
+
     const setCurrentBlockListToSelectedDay = () => {
-        if (selectedDay === 1) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne})
-        else if (selectedDay === 2) setCurrentExerciseBlockList({currentBlock: exerciseBlockListDayTwo, setMethod:  setExerciseBlockListDayTwo})
-        else if (selectedDay === 3) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayThree, setMethod: setExerciseBlockListDayThree})
-        else if (selectedDay === 4) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFour, setMethod: setExerciseBlockListDayFour})
-        else if (selectedDay === 5) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFive, setMethod: setExerciseBlockListDayFive})
-        else if (selectedDay === 6) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySix, setMethod: setExerciseBlockListDaySix})
-        else if (selectedDay === 7) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySeven, setMethod: setExerciseBlockListDaySeven});
+        switch(selectedDay){
+            case 1: {
+                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne});
+                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj });
+                break;
+            }
+            case 2: {
+                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayTwo, setMethod: setExerciseBlockListDayTwo});
+                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                break;
+            }
+            case 3: {
+                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayThree, setMethod: setExerciseBlockListDayThree});
+                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                break;
+            }
+            case 4: {
+                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFour, setMethod: setExerciseBlockListDayFour});
+                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                break;
+            }
+            case 5: {
+                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFive, setMethod: setExerciseBlockListDayFive});
+                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                break;
+            }
+            case 6: {
+                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySix, setMethod: setExerciseBlockListDaySix});
+                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                break;
+            }
+            case 7: {
+                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySeven, setMethod: setExerciseBlockListDaySeven});
+                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                break;
+            }
+            default: {
+                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne});
+                break;
+            }
+        }
+
+        // if (selectedDay === 1) 
+        // else if (selectedDay === 2) setCurrentExerciseBlockList({currentBlock: exerciseBlockListDayTwo, setMethod:  setExerciseBlockListDayTwo})
+        // else if (selectedDay === 3) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayThree, setMethod: setExerciseBlockListDayThree})
+        // else if (selectedDay === 4) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFour, setMethod: setExerciseBlockListDayFour})
+        // else if (selectedDay === 5) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFive, setMethod: setExerciseBlockListDayFive})
+        // else if (selectedDay === 6) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySix, setMethod: setExerciseBlockListDaySix})
+        // else if (selectedDay === 7) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySeven, setMethod: setExerciseBlockListDaySeven});
     }
 
     const handleUserDropDownOnChange = (docID) => {
@@ -59,8 +105,6 @@ const Dashboard = ({ history }) => {
                 setCurrentClient(document);
         });
     }
-
-    console.log(exerciseBlockListDayOne);
 
     const handleAddNewExerciseBtn = () => {
         //setExerciseBlockListDayOne(exerciseBlockListDayOne.concat(exerciseBlockListDayOne.length + 1));
