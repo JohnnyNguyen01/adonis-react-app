@@ -67,15 +67,32 @@ class Firebase {
         return exerciseList;
     }
 
+    //creates a new workout and returns the docRef ID of the new workout
     async createNewWorkoutDoc(coachID, clientID, startDate,description) {
-        await app.firestore().collection("workouts").doc().set({
+        var docRefID;
+        await app.firestore().collection("workouts").add({
             coachID: coachID,
             'date created': new Date(),
             'start date' : startDate,
             userID: clientID,
             description: description,
+        }).then(docRef => {docRefID = docRef.id}).catch(error => alert(error));
+        return docRefID;
+    }
+
+    //adds all the exercises to a new workout doc
+    async addExerciseToNewWorkoutDoc(docRefID, allWorkouts){
+        Object.entries(allWorkouts).forEach((workoutEntry) => {
+            const[indexKey, workout] = workoutEntry;
+            app.firestore().collection("workouts").doc(docRefID).update({
+                //todo: sort out dates array
+                dates: "",
+                day: indexKey,
+                exercises: workout
+            });
         });
     }
+
     //get all user workouts
     async getAllUserWorkouts(uid) {
         var workouts = app.firestore().collection("workouts").where("userID", "==", uid);

@@ -22,7 +22,7 @@ const Dashboard = ({ history }) => {
     const [exerciseBlockListDayFive, setExerciseBlockListDayFive] = useState([]);
     const [exerciseBlockListDaySix, setExerciseBlockListDaySix] = useState([]);
     const [exerciseBlockListDaySeven, setExerciseBlockListDaySeven] = useState([]);
-    const [currentExerciseBlockList, setCurrentExerciseBlockList] = useState({currentBlock:exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne});
+    const [currentExerciseBlockList, setCurrentExerciseBlockList] = useState({ currentBlock: exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne });
     const [selectedDay, setSelectedDay] = useState(1);
     const [startDate, setStartDate] = useState(new Date());
     const [cycleLength, setCycleLength] = useState(0);
@@ -43,49 +43,49 @@ const Dashboard = ({ history }) => {
         }
         if (userDocList.length === 0) fetchUsers();
         setCurrentBlockListToSelectedDay();
-    }, [selectedDay, workoutExerciseListObj ,exerciseBlockListDayOne,exerciseBlockListDayTwo, exerciseBlockListDayThree, exerciseBlockListDayFour, exerciseBlockListDayFive, exerciseBlockListDaySix, exerciseBlockListDaySeven ]);
-    
-    console.log(allWorkouts);
+    }, [selectedDay, workoutExerciseListObj, exerciseBlockListDayOne, exerciseBlockListDayTwo, exerciseBlockListDayThree, exerciseBlockListDayFour, exerciseBlockListDayFive, exerciseBlockListDaySix, exerciseBlockListDaySeven]);
+
+    console.log(typeof allWorkouts);
 
     const setCurrentBlockListToSelectedDay = () => {
-        switch(selectedDay){
+        switch (selectedDay) {
             case 1: {
-                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne});
-                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj });
+                setCurrentExerciseBlockList({ currentBlock: exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne });
+                setAllWorkouts({ ...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj });
                 break;
             }
             case 2: {
-                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayTwo, setMethod: setExerciseBlockListDayTwo});
-                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                setCurrentExerciseBlockList({ currentBlock: exerciseBlockListDayTwo, setMethod: setExerciseBlockListDayTwo });
+                setAllWorkouts({ ...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj });
                 break;
             }
             case 3: {
-                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayThree, setMethod: setExerciseBlockListDayThree});
-                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                setCurrentExerciseBlockList({ currentBlock: exerciseBlockListDayThree, setMethod: setExerciseBlockListDayThree });
+                setAllWorkouts({ ...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj });
                 break;
             }
             case 4: {
-                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFour, setMethod: setExerciseBlockListDayFour});
-                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                setCurrentExerciseBlockList({ currentBlock: exerciseBlockListDayFour, setMethod: setExerciseBlockListDayFour });
+                setAllWorkouts({ ...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj });
                 break;
             }
             case 5: {
-                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFive, setMethod: setExerciseBlockListDayFive});
-                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                setCurrentExerciseBlockList({ currentBlock: exerciseBlockListDayFive, setMethod: setExerciseBlockListDayFive });
+                setAllWorkouts({ ...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj });
                 break;
             }
             case 6: {
-                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySix, setMethod: setExerciseBlockListDaySix});
-                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                setCurrentExerciseBlockList({ currentBlock: exerciseBlockListDaySix, setMethod: setExerciseBlockListDaySix });
+                setAllWorkouts({ ...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj });
                 break;
             }
             case 7: {
-                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySeven, setMethod: setExerciseBlockListDaySeven});
-                setAllWorkouts({...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj});
+                setCurrentExerciseBlockList({ currentBlock: exerciseBlockListDaySeven, setMethod: setExerciseBlockListDaySeven });
+                setAllWorkouts({ ...allWorkouts, [`${selectedDay}`]: workoutExerciseListObj });
                 break;
             }
             default: {
-                setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne});
+                setCurrentExerciseBlockList({ currentBlock: exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne });
                 break;
             }
         }
@@ -110,7 +110,6 @@ const Dashboard = ({ history }) => {
         //setExerciseBlockListDayOne(exerciseBlockListDayOne.concat(exerciseBlockListDayOne.length + 1));
         var currentBlock = currentExerciseBlockList.currentBlock;
         currentExerciseBlockList.setMethod([...currentBlock, currentBlock.push(currentBlock.length + 1)]);
-        console.log( currentExerciseBlockList.currentBlock);
     }
 
     const handleStartDateChange = (date) => setStartDate(date)
@@ -118,37 +117,22 @@ const Dashboard = ({ history }) => {
     const handleCycleLengthTFChange = (num) => setCycleLength(num);
 
     const handleSubmitButton = async () => {
-        /*
-        * handleAddExerciseBtn:
-        *  1. check if the current/latest workout exists.
-        *  exists ? set it's repeat boolean to false
-        *
-        *  2. create new workout document: UID, Date Created, coachID, startDate,
-        *  repeat true
-        *
-        *  3.Add Each Exercise into a new day Doc for the "Days" collection
-        *   set dates for only that week
-        *
-        */
+       
         let clientDoc = currentClient.data();
         var latestWorkout = await Firebase.getLatestWorkoutForUser(currentClient.id);
-        console.log(latestWorkout.data());
         if (latestWorkout != null) {
             await latestWorkout.ref.update({ repeat: false });
         }
         let coachID = userContext.currentUser.uid;
-        Firebase.createNewWorkoutDoc(coachID, currentClient.id, startDate, workoutDescription);
+        var docRefID = await  Firebase.createNewWorkoutDoc(coachID, currentClient.id, startDate, workoutDescription);
+        console.log(docRefID);
+        Firebase.addExerciseToNewWorkoutDoc(docRefID, allWorkouts);
     }
 
     const selectUserOptions = userDocList.map((doc) => ({
         value: doc.id,
         label: doc.data().username
     }));
-
-    /*
-     * 1. On new page, create new exercise blocks 
-     * 2. Assign Exercise Block output to a day -> Day: {dates array, day number, exercises{}: exerciseBlockOutput}
-     */
 
     const renderExerciseBlocks = currentExerciseBlockList.currentBlock.map((block, index) => {
         return (
@@ -189,7 +173,7 @@ const Dashboard = ({ history }) => {
                                 value={startDate}
                                 onChange={(date) => { handleStartDateChange(date) }} />
                         </MuiPickersUtilsProvider>
-                        
+
                     </div>
                     <div className={classes.marginTop}>
                         <div>
@@ -207,7 +191,7 @@ const Dashboard = ({ history }) => {
                             <TextField
                                 id="filled-multiline-static"
                                 label="Coach Instructions"
-                                onChange={(event)=> setWorkoutDescription(event.target.value)}
+                                onChange={(event) => setWorkoutDescription(event.target.value)}
                                 multiline
                                 rows={4}
                                 defaultValue=""
