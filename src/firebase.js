@@ -84,7 +84,7 @@ class Firebase {
     async addExerciseToNewWorkoutDoc(docRefID, allWorkouts){
         Object.entries(allWorkouts).forEach((workoutEntry) => {
             const[indexKey, workout] = workoutEntry;
-            app.firestore().collection("workouts").doc(docRefID).update({
+            app.firestore().collection("workouts").doc(docRefID).collection("Days").add({
                 //todo: sort out dates array
                 dates: "",
                 day: indexKey,
