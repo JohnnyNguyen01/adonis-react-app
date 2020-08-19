@@ -28,6 +28,7 @@ const Dashboard = ({ history }) => {
     const [cycleLength, setCycleLength] = useState(0);
     const [workoutExerciseListObj, setWorkoutExerciseListObj] = useState({});
     const [allWorkouts, setAllWorkouts] = useState({})
+    const [workoutDescription, setWorkoutDescription] = useState("");
     const userContext = useContext(UserContext);
     const classes = useStyles();
 
@@ -44,8 +45,7 @@ const Dashboard = ({ history }) => {
         setCurrentBlockListToSelectedDay();
     }, [selectedDay, workoutExerciseListObj ,exerciseBlockListDayOne,exerciseBlockListDayTwo, exerciseBlockListDayThree, exerciseBlockListDayFour, exerciseBlockListDayFive, exerciseBlockListDaySix, exerciseBlockListDaySeven ]);
     
-    console.log(exerciseBlockListDayOne);
-    console.log(exerciseBlockListDayTwo);
+    console.log(allWorkouts);
 
     const setCurrentBlockListToSelectedDay = () => {
         switch(selectedDay){
@@ -137,7 +137,7 @@ const Dashboard = ({ history }) => {
             await latestWorkout.ref.update({ repeat: false });
         }
         let coachID = userContext.currentUser.uid;
-        Firebase.createNewWorkoutDoc(coachID, currentClient.id);
+        Firebase.createNewWorkoutDoc(coachID, currentClient.id, startDate, workoutDescription);
     }
 
     const selectUserOptions = userDocList.map((doc) => ({
@@ -145,7 +145,6 @@ const Dashboard = ({ history }) => {
         label: doc.data().username
     }));
 
-    //console.log(workoutExerciseListObj);
     /*
      * 1. On new page, create new exercise blocks 
      * 2. Assign Exercise Block output to a day -> Day: {dates array, day number, exercises{}: exerciseBlockOutput}
@@ -164,6 +163,7 @@ const Dashboard = ({ history }) => {
                     workoutExerciseList={workoutExerciseListObj} />
             </div>);
     });
+
 
     return (
         <Grid container direction="column">
@@ -189,11 +189,7 @@ const Dashboard = ({ history }) => {
                                 value={startDate}
                                 onChange={(date) => { handleStartDateChange(date) }} />
                         </MuiPickersUtilsProvider>
-                        <TextField
-                            onChange={(e) => handleCycleLengthTFChange(e.target.value)}
-                            style={{ marginLeft: 5 }}
-                            placeholder={cycleLength.toString()}
-                            label="Microcycle length" />
+                        
                     </div>
                     <div className={classes.marginTop}>
                         <div>
@@ -211,6 +207,7 @@ const Dashboard = ({ history }) => {
                             <TextField
                                 id="filled-multiline-static"
                                 label="Coach Instructions"
+                                onChange={(event)=> setWorkoutDescription(event.target.value)}
                                 multiline
                                 rows={4}
                                 defaultValue=""
