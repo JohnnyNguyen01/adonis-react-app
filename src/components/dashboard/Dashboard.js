@@ -11,6 +11,9 @@ import OutlinedInputLabel from "../common/OutlinedInputLabel/OutlinedInputLabel"
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns"
 import { UserContext } from "../providers/UserContext";
+import Moment from 'react-moment';
+import moment from 'moment';
+
 
 const Dashboard = ({ history }) => {
     const [userDocList, setUserDocList] = useState([]);
@@ -25,10 +28,10 @@ const Dashboard = ({ history }) => {
     const [currentExerciseBlockList, setCurrentExerciseBlockList] = useState({ currentBlock: exerciseBlockListDayOne, setMethod: setExerciseBlockListDayOne });
     const [selectedDay, setSelectedDay] = useState(1);
     const [startDate, setStartDate] = useState(new Date());
-    const [cycleLength, setCycleLength] = useState(0);
     const [workoutExerciseListObj, setWorkoutExerciseListObj] = useState({});
     const [allWorkouts, setAllWorkouts] = useState({})
     const [workoutDescription, setWorkoutDescription] = useState("");
+    const [exerciseBlockDayDates, setExerciseBlockDayDates] = useState({});
     const userContext = useContext(UserContext);
     const classes = useStyles();
 
@@ -43,9 +46,64 @@ const Dashboard = ({ history }) => {
         }
         if (userDocList.length === 0) fetchUsers();
         setCurrentBlockListToSelectedDay();
-    }, [selectedDay, workoutExerciseListObj, exerciseBlockListDayOne, exerciseBlockListDayTwo, exerciseBlockListDayThree, exerciseBlockListDayFour, exerciseBlockListDayFive, exerciseBlockListDaySix, exerciseBlockListDaySeven]);
+        setUpOutputDates();
+    }, [startDate, selectedDay, workoutExerciseListObj, exerciseBlockListDayOne, exerciseBlockListDayTwo,
+        exerciseBlockListDayThree, exerciseBlockListDayFour, exerciseBlockListDayFive, exerciseBlockListDaySix, exerciseBlockListDaySeven]);
 
-    console.log(typeof allWorkouts);
+
+    /**
+     *  Increments supplied date weekly by num times
+     * @param {Date} startingDate The starting date to increment
+     * @param {Number} num The amount of times to increment
+     * @return {Array}     An array of all tinfo@myspecialistssydney.com.auhe incremented dates including staring date
+     */
+    function incrementDateWeeklyBy(startingDate, num) {
+        const DatesList = [startingDate];
+        var date = startingDate;
+        for (var i = 0; i < num; i++) {
+            DatesList.push(incrementDateByOneWeek(date));
+            date = incrementDateByOneWeek(date);
+        }
+        return DatesList;
+    }
+
+    const getThis = () => {
+        var i = exerciseBlockDayDates["1"];
+        return i;
+    }
+
+    console.log(typeof exerciseBlockDayDates["1"]);
+    const setUpOutputDates = () => {
+        setExerciseBlockDayDates(
+            {
+                1: incrementDateWeeklyBy(startDate, 10),
+                2: incrementDateWeeklyBy(incrementDateByDays(startDate, 1), 12),
+                3: incrementDateWeeklyBy(incrementDateByDays(startDate, 2), 12),
+                4: incrementDateWeeklyBy(incrementDateByDays(startDate, 3), 12),
+                5: incrementDateWeeklyBy(incrementDateByDays(startDate, 4), 12),
+                6: incrementDateWeeklyBy(incrementDateByDays(startDate, 5), 12),
+                7: incrementDateWeeklyBy(incrementDateByDays(startDate, 6), 12),
+            });
+
+    }
+    /**
+    * Increments the supplied date by 7 days
+    * @param {Date} date The date to increment
+    * @return {Date}     The return Date 
+    */
+    function incrementDateByOneWeek(date) {
+        return moment(date).add(7, "days")._d;
+    }
+
+    /**
+    * Increments the supplied date by 7 days
+    * @param {Date} date The date to increment
+    * @param {Number} number Amount to increment by
+    * @return {Date}     The Incremented Date Date 
+    */
+    function incrementDateByDays(date, number) {
+        return moment(date).add(number, "days")._d;
+    }
 
     const setCurrentBlockListToSelectedDay = () => {
         switch (selectedDay) {
@@ -90,13 +148,6 @@ const Dashboard = ({ history }) => {
             }
         }
 
-        // if (selectedDay === 1) 
-        // else if (selectedDay === 2) setCurrentExerciseBlockList({currentBlock: exerciseBlockListDayTwo, setMethod:  setExerciseBlockListDayTwo})
-        // else if (selectedDay === 3) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayThree, setMethod: setExerciseBlockListDayThree})
-        // else if (selectedDay === 4) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFour, setMethod: setExerciseBlockListDayFour})
-        // else if (selectedDay === 5) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDayFive, setMethod: setExerciseBlockListDayFive})
-        // else if (selectedDay === 6) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySix, setMethod: setExerciseBlockListDaySix})
-        // else if (selectedDay === 7) setCurrentExerciseBlockList({currentBlock:exerciseBlockListDaySeven, setMethod: setExerciseBlockListDaySeven});
     }
 
     const handleUserDropDownOnChange = (docID) => {
@@ -107,26 +158,22 @@ const Dashboard = ({ history }) => {
     }
 
     const handleAddNewExerciseBtn = () => {
-        //setExerciseBlockListDayOne(exerciseBlockListDayOne.concat(exerciseBlockListDayOne.length + 1));
         var currentBlock = currentExerciseBlockList.currentBlock;
         currentExerciseBlockList.setMethod([...currentBlock, currentBlock.push(currentBlock.length + 1)]);
     }
 
     const handleStartDateChange = (date) => setStartDate(date)
 
-    const handleCycleLengthTFChange = (num) => setCycleLength(num);
-
     const handleSubmitButton = async () => {
-       
-        let clientDoc = currentClient.data();
+        //let clientDoc = currentClient.data();
         var latestWorkout = await Firebase.getLatestWorkoutForUser(currentClient.id);
         if (latestWorkout != null) {
             await latestWorkout.ref.update({ repeat: false });
         }
         let coachID = userContext.currentUser.uid;
-        var docRefID = await  Firebase.createNewWorkoutDoc(coachID, currentClient.id, startDate, workoutDescription);
+        var docRefID = await Firebase.createNewWorkoutDoc(coachID, currentClient.id, startDate, workoutDescription);
         console.log(docRefID);
-        Firebase.addExerciseToNewWorkoutDoc(docRefID, allWorkouts);
+        Firebase.addExerciseToNewWorkoutDoc(docRefID, allWorkouts, exerciseBlockDayDates);
     }
 
     const selectUserOptions = userDocList.map((doc) => ({
@@ -147,7 +194,6 @@ const Dashboard = ({ history }) => {
                     workoutExerciseList={workoutExerciseListObj} />
             </div>);
     });
-
 
     return (
         <Grid container direction="column">

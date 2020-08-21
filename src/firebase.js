@@ -20,6 +20,11 @@ class Firebase {
         this.db = app.firestore();
     }
 
+    /**
+     * Logs in the user using their email and password as credentials
+     * @param {String} email 
+     * @param {String} password 
+     */
     async login(email, password) {
         ///REMEMBER: this returns a "promise" 
         ///-> Like how futures/streams work in 
@@ -27,10 +32,17 @@ class Firebase {
         return await this.auth.signInWithEmailAndPassword(email, password);
     }
 
+    /**
+     * Signs out the currently logged in user
+     */
     async logout() {
         return await this.auth.signOut();
     }
 
+    /**
+     * Checks if there is a current user logged on.
+     * @returns {Boolean} whether a user is logged into Firebase
+     */
     async currentUserExists() {
         return this.auth.currentUser.uid ? true : false;
     }
@@ -39,6 +51,9 @@ class Firebase {
         return await this.auth.currentUser;
     }
 
+    /**
+     * 
+     */
     async getUserList() {
         var userList = [];
         await app.firestore().collection("users").get().then((snapshot) => {
@@ -49,6 +64,10 @@ class Firebase {
         return userList;
     }
 
+    /**
+     * Gets a list of all the users in Firestore collection "Users"
+     * @returns a list of all users and their document snapshot
+     */
     async getUserListAsDoc() {
         var userList = [];
         await app.firestore().collection("users").get().then((snapshot) => {
@@ -67,7 +86,14 @@ class Firebase {
         return exerciseList;
     }
 
-    //creates a new workout and returns the docRef ID of the new workout
+    /**
+     *  creates a new workout and returns the docRef ID of the new workout
+     * @param {String} coachID 
+     * @param {String} clientID 
+     * @param {Date} startDate 
+     * @param {String} description  thew workout description set on the dashboard
+     * @returns     docRefID        the encoded DocumentReferenceID of the workout
+     */
     async createNewWorkoutDoc(coachID, clientID, startDate,description) {
         var docRefID;
         await app.firestore().collection("workouts").add({
@@ -81,12 +107,12 @@ class Firebase {
     }
 
     //adds all the exercises to a new workout doc
-    async addExerciseToNewWorkoutDoc(docRefID, allWorkouts){
+    async addExerciseToNewWorkoutDoc(docRefID, allWorkouts,dayDates){
         Object.entries(allWorkouts).forEach((workoutEntry) => {
             const[indexKey, workout] = workoutEntry;
             app.firestore().collection("workouts").doc(docRefID).collection("Days").add({
                 //todo: sort out dates array
-                dates: "",
+                dates: dayDates[`${indexKey.toString()}`],
                 day: indexKey,
                 exercises: workout
             });
