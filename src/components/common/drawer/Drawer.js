@@ -68,10 +68,12 @@ const DashDrawer = (props) => {
                             <ListItemText>Manage Users</ListItemText>
                         </ListItem>
                     </Link>
+                    <Link to="/manageExercises" className={classes.link}>
                     <ListItem button key="exerciseDash" className={classes.whiteColor}>
                         <ListItemIcon><FitnessCenterIcon className={classes.whiteColor} /></ListItemIcon>
                         <ListItemText>Manage Exercises</ListItemText>
                     </ListItem>
+                    </Link>
                     <ListItem button key="chatLobby" className={classes.whiteColor}>
                         <ListItemIcon><ForumIcon className={classes.whiteColor} /></ListItemIcon>
                         <ListItemText>Message Clients</ListItemText>
