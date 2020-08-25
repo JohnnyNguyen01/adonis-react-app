@@ -47,6 +47,9 @@ const ManageExercisesScreen = ({ history }) => {
             setShowAlert(true);
         }
     }
+    const handleExerciseDelete = async (exerciseName) => {
+        Firebase.deleteExeriseFromName(exerciseName);
+    }
 
     return (
         <Grid container direction="column">
@@ -65,7 +68,7 @@ const ManageExercisesScreen = ({ history }) => {
                             {
                                 icon: DeleteOutlineIcon,
                                 tooltip: "Delete Exercise",
-                                onClick: (event, rowData) => { console.log(rowData) }
+                                onClick: (event, rowData) => { handleExerciseDelete(rowData.exerciseName); }
                             }
                         ]}
                         data={Object.values(exerciseList)}

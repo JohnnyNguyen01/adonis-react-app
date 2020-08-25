@@ -169,6 +169,19 @@ class Firebase {
         });
     }
 
+    /**
+     * Deletes the indicated exercise from the "exercises" collections
+     * @param {String} exerciseName Name of the exercise you want to delete
+     */
+    async deleteExeriseFromName(exerciseName){
+        var allExercises = await app.firestore().collection("exercises").get();
+        allExercises.forEach(doc => {
+            if(doc.data().exerciseName === exerciseName){
+                app.firestore().collection("exercises").doc(doc.ref.id).delete();
+            }
+        });
+    }
+
     //returns every single workout in a list
     async getAllWorkoutsAsDocList(){
         var workoutList = [];
