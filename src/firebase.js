@@ -52,7 +52,8 @@ class Firebase {
     }
 
     /**
-     * 
+     * Get a list of all the users within the "Users" data object collection
+     * @returns userList: List of all user.data() objects
      */
     async getUserList() {
         var userList = [];
@@ -66,7 +67,7 @@ class Firebase {
 
     /**
      * Gets a list of all the users in Firestore collection "Users"
-     * @returns a list of all users and their document snapshot
+     * @returns {Array <app.firestore.DocumentData>} a list of all users and their document snapshot
      */
     async getUserListAsDoc() {
         var userList = [];
@@ -78,6 +79,16 @@ class Firebase {
         return userList;
     }
 
+    /**
+     *  Deletes the selected workout from the "Exercises" collection
+     * @param {Object} workoutObject  the object to be deleted
+     */
+    async deleteSelectedWorkout(workoutObject){
+
+    }
+    /**
+     * Get a list of the document data of all the exercise documents in the "Exercises" root collection
+     */
     async getExerciseList() {
         var exerciseList = [];
         await app.firestore().collection("exercises").get().then(snapshot => {
@@ -93,7 +104,7 @@ class Firebase {
      * @param {Date} startDate 
      * @param {String} description  thew workout description set on the dashboard
      * @returns     docRefID        the encoded DocumentReferenceID of the workout
-     */
+     */ 
     async createNewWorkoutDoc(coachID, clientID, startDate,description) {
         var docRefID;
         await app.firestore().collection("workouts").add({
@@ -106,7 +117,12 @@ class Firebase {
         return docRefID;
     }
 
-    //adds all the exercises to a new workout doc
+    /**
+     * Adds all the exercises to a new workout doc
+     * @param {string} docRefID       the document reference ID for which doc you want to write into
+     * @param {Array<object>} allWorkouts   object containing the workouts you want to add in
+     * @param {Array<Date>} dayDates    an object of dates that corresponds to each exercise
+     */
     async addExerciseToNewWorkoutDoc(docRefID, allWorkouts,dayDates){
         Object.entries(allWorkouts).forEach((workoutEntry) => {
             const[indexKey, workout] = workoutEntry;
@@ -119,19 +135,38 @@ class Firebase {
         });
     }
 
-    //get all user workouts
+    /**
+     * Get all the user workouts document data within the "workouts" collection
+     * @param {String} uid the userID that you want to get the workouts for 
+     */
     async getAllUserWorkouts(uid) {
         var workouts = app.firestore().collection("workouts").where("userID", "==", uid);
         workouts.get().then(querySnapshot => querySnapshot.forEach(doc => doc.data()));
     }
 
-    //grab latest user workout
+    /**
+     *  Retrieve the latest workout doc for the specified userID
+     * @param {String} uid  The usedID of the account we want to retrieve from
+     * @returns {app.firestore.querySnapshot} the latest workout for uid
+     */ 
     async getLatestWorkoutForUser(uid) {
        var userWorkoutList = [];
        var workoutRefs = await app.firestore().collection("workouts")
        .where("userID", "==", uid).orderBy("date created").limit(1).get();
        workoutRefs.forEach(workoutDoc => userWorkoutList.push(workoutDoc));
        return userWorkoutList[0];
+    }
+
+    /**
+     * Adds a new exercise to the "Exercises" root collection
+     * @param {String} exerciseName 
+     * @param {String} excerciseURL 
+     */
+    async addNewExerciseToDB(exerciseName, exerciseURL){
+        await app.firestore().collection("exercises").doc().set({
+            exerciseName: exerciseName,
+            exerciseURL: exerciseURL
+        });
     }
 
     //returns every single workout in a list
