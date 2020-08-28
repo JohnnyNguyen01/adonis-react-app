@@ -33,18 +33,21 @@ export default function UserTable() {
         fetchData();
     }, []);
 
+    console.log(userList);
 
     const renderedUsers = userList.map((user) => {
         return (
-            <TableRow key={user.email}>
-                <TableCell component="th" scope="row">
-                    <div className={classes.inline}>
-                        <Avatar alt={user.username} src={user.image_url} />
-                        <Typography>{user.username}</Typography>
-                    </div>
-                </TableCell>
-                <TableCell align="right">{user.email}</TableCell>
-            </TableRow>
+            <div onClick={console.log(user.data())}>
+                <TableRow key={user.data().email}>
+                    <TableCell component="th" scope="row">
+                        <div className={classes.inline}>
+                            <Avatar alt={user.data().username} src={user.data().image_url} className={classes.inline} />
+                            <Typography className={classes.inline}>{user.data().username}</Typography>
+                        </div>
+                    </TableCell>
+                    <TableCell align="right">{user.data().email}</TableCell>
+                </TableRow>
+            </div>
         );
     });
 

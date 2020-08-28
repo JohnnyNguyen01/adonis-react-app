@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
         top: "30%",
         width: "450px",
         height: "450px",
+        opacity:"80%"
     },
     form: {
         textAlign: "center",

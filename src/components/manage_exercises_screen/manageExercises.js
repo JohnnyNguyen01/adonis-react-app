@@ -8,7 +8,6 @@ import Firebase from "../../firebase";
 import { makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 
-
 const useStyles = makeStyles((theme) => ({
     addButton: {
         backgroundColor: green[400],

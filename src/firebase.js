@@ -53,13 +53,13 @@ class Firebase {
 
     /**
      * Get a list of all the users within the "Users" data object collection
-     * @returns userList: List of all user.data() objects
+     * @returns userList: List of all user doc reference objects
      */
     async getUserList() {
         var userList = [];
         await app.firestore().collection("users").get().then((snapshot) => {
             snapshot.forEach((doc) => {
-                userList.push(doc.data());
+                userList.push(doc);
             });
         });
         return userList;
