@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import { Avatar, Typography } from "@material-ui/core";
+import MaterialTable from 'material-table';
+import React, { useEffect, useState } from 'react';
 import Firebase from "../../../firebase";
-import { Avatar, Button, Typography } from "@material-ui/core";
 import useStyles from "./UseStyles";
 
 async function getUserList() {
@@ -24,7 +18,6 @@ async function getUserList() {
 export default function UserTable() {
     const [userList, setUserList] = useState([]);
     const classes = useStyles();
-
     useEffect(() => {
         const fetchData = async () => {
             var listData = await getUserList();
@@ -33,52 +26,41 @@ export default function UserTable() {
         fetchData();
     }, []);
 
-    console.log(userList);
 
-    const renderedUsers = userList.map((user) => {
-        return (
-            <div onClick={console.log(user.data())}>
-                <TableRow key={user.data().email}>
-                    <TableCell component="th" scope="row">
-                        <div className={classes.inline}>
-                            <Avatar alt={user.data().username} src={user.data().image_url} className={classes.inline} />
-                            <Typography className={classes.inline}>{user.data().username}</Typography>
-                        </div>
-                    </TableCell>
-                    <TableCell align="right">{user.data().email}</TableCell>
-                </TableRow>
-            </div>
-        );
+    //I have no idea why this works. It makes no sense.
+    var dataList = [];
+    const setupData = () => userList.forEach((user) => {
+        var userDoc = user.data();
+        dataList.push({
+            'username': userDoc.username,
+            'email': userDoc.email,
+            'url': userDoc.image_url,
+            'uid' : user.ref.id,
+        });
     });
+    setupData();
 
+
+    const columns = [
+        { title: "User Photo", field: "url", render: rowData => <Avatar alt={rowData.username} src={rowData.url} /> },
+        { title: "Username", field: "username" },
+        { title: "email", field: "email" },
+        { title: "userID", field:"uid"}];
+
+    const handleUserDelete = async (uid) => {
+        Firebase.deleteUserWithUID(uid);
+    }
 
     return (
-        <div>
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Username</TableCell>
-                            <TableCell align="right">Email</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {renderedUsers}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <div className={classes.floatRight}>
-                <Button
-                    variant="contained"
-                    className={classes.addButton}>
-                    Add User
-                </Button>
-                <Button
-                    variant="contained"
-                    className={classes.removeButton}>
-                    Remove User
-                </Button>
-            </div>
-        </div>
+        <MaterialTable
+            title="Manage Users"
+            columns={columns}
+            data={dataList} 
+            actions={[
+                {icon: "delete",
+                tooltip: "Delete this user",
+                onClick: (event, rowData) => handleUserDelete(rowData.uid)
+                }
+            ]}/>
     );
 }

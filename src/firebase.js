@@ -83,7 +83,7 @@ class Firebase {
      *  Deletes the selected workout from the "Exercises" collection
      * @param {Object} workoutObject  the object to be deleted
      */
-    async deleteSelectedWorkout(workoutObject){
+    async deleteSelectedWorkout(workoutObject) {
 
     }
     /**
@@ -104,16 +104,16 @@ class Firebase {
      * @param {Date} startDate 
      * @param {String} description  thew workout description set on the dashboard
      * @returns     docRefID        the encoded DocumentReferenceID of the workout
-     */ 
-    async createNewWorkoutDoc(coachID, clientID, startDate,description) {
+     */
+    async createNewWorkoutDoc(coachID, clientID, startDate, description) {
         var docRefID;
         await app.firestore().collection("workouts").add({
             coachID: coachID,
             'date created': new Date(),
-            'start date' : startDate,
+            'start date': startDate,
             userID: clientID,
             description: description,
-        }).then(docRef => {docRefID = docRef.id}).catch(error => alert(error));
+        }).then(docRef => { docRefID = docRef.id }).catch(error => alert(error));
         return docRefID;
     }
 
@@ -123,9 +123,9 @@ class Firebase {
      * @param {Array<object>} allWorkouts   object containing the workouts you want to add in
      * @param {Array<Date>} dayDates    an object of dates that corresponds to each exercise
      */
-    async addExerciseToNewWorkoutDoc(docRefID, allWorkouts,dayDates){
+    async addExerciseToNewWorkoutDoc(docRefID, allWorkouts, dayDates) {
         Object.entries(allWorkouts).forEach((workoutEntry) => {
-            const[indexKey, workout] = workoutEntry;
+            const [indexKey, workout] = workoutEntry;
             app.firestore().collection("workouts").doc(docRefID).collection("Days").add({
                 //todo: sort out dates array
                 dates: dayDates[`${indexKey.toString()}`],
@@ -148,13 +148,13 @@ class Firebase {
      *  Retrieve the latest workout doc for the specified userID
      * @param {String} uid  The usedID of the account we want to retrieve from
      * @returns {app.firestore.querySnapshot} the latest workout for uid
-     */ 
+     */
     async getLatestWorkoutForUser(uid) {
-       var userWorkoutList = [];
-       var workoutRefs = await app.firestore().collection("workouts")
-       .where("userID", "==", uid).orderBy("date created").limit(1).get();
-       workoutRefs.forEach(workoutDoc => userWorkoutList.push(workoutDoc));
-       return userWorkoutList[0];
+        var userWorkoutList = [];
+        var workoutRefs = await app.firestore().collection("workouts")
+            .where("userID", "==", uid).orderBy("date created").limit(1).get();
+        workoutRefs.forEach(workoutDoc => userWorkoutList.push(workoutDoc));
+        return userWorkoutList[0];
     }
 
     /**
@@ -162,7 +162,7 @@ class Firebase {
      * @param {String} exerciseName 
      * @param {String} excerciseURL 
      */
-    async addNewExerciseToDB(exerciseName, exerciseURL){
+    async addNewExerciseToDB(exerciseName, exerciseURL) {
         await app.firestore().collection("exercises").doc().set({
             exerciseName: exerciseName,
             exerciseURL: exerciseURL
@@ -173,24 +173,35 @@ class Firebase {
      * Deletes the indicated exercise from the "exercises" collections
      * @param {String} exerciseName Name of the exercise you want to delete
      */
-    async deleteExeriseFromName(exerciseName){
+    async deleteExeriseFromName(exerciseName) {
         var allExercises = await app.firestore().collection("exercises").get();
         allExercises.forEach(doc => {
-            if(doc.data().exerciseName === exerciseName){
+            if (doc.data().exerciseName === exerciseName) {
                 app.firestore().collection("exercises").doc(doc.ref.id).delete();
             }
         });
     }
 
+    /**
+     * Delete a user from the User's collection via uid
+     * @param {String} uid  the uid of the user you want to delete
+     */
+    async deleteUserWithUID(uid) {
+        try {
+            app.firestore().collection("users").doc(uid).delete();
+        } catch (e) {
+            alert(e);
+        }
+    }
     //returns every single workout in a list
-    async getAllWorkoutsAsDocList(){
+    async getAllWorkoutsAsDocList() {
         var workoutList = [];
         var workouts = await app.firestore().collection("workouts").get();
         workouts.forEach(workout => workoutList.push(workout.data()));
         return workoutList;
     }
 
-    async updateWorkoutWithRef(docRef, updateObj){
+    async updateWorkoutWithRef(docRef, updateObj) {
         await docRef.update(updateObj);
     }
 }
