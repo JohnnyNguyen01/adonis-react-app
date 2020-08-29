@@ -49,6 +49,9 @@ export default function UserTable() {
 
     const handleUserDelete = async (uid) => {
         Firebase.deleteUserWithUID(uid);
+        dataList.forEach( (user, index) => {
+            if(user.uid === uid) ;
+        });
     }
 
     return (
