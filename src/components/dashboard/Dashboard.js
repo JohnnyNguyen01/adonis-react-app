@@ -72,7 +72,6 @@ const Dashboard = ({ history }) => {
         return i;
     }
 
-    console.log(typeof exerciseBlockDayDates["1"]);
     const setUpOutputDates = () => {
         setExerciseBlockDayDates(
             {
@@ -172,7 +171,6 @@ const Dashboard = ({ history }) => {
         }
         let coachID = userContext.currentUser.uid;
         var docRefID = await Firebase.createNewWorkoutDoc(coachID, currentClient.id, startDate, workoutDescription);
-        console.log(docRefID);
         Firebase.addExerciseToNewWorkoutDoc(docRefID, allWorkouts, exerciseBlockDayDates);
     }
 

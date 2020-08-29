@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField } from "@material-ui/core";
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper } from "@material-ui/core";
 import OutlinedInputLabel from "../../common/OutlinedInputLabel/OutlinedInputLabel";
 import Firebase from "../../../firebase";
@@ -140,12 +141,14 @@ const ExerciseBlock = (props) => {
         <Grid container direction="column">
             <Grid item container>
                 <Grid item sm={6}>
-                    <OutlinedInputLabel
-                        onChange={event => { handleExerciseDDonChange(event.target.value) }}
-                        options={exerciseOptions}
-                        inputlabel="Exercises"
-                        classes={classes}
-                    />
+                    <Autocomplete
+                    id="exercises"
+                    className={classes.textfield}
+                    options={exerciseOptions}
+                    getOptionLabel={exercise => exercise.label}
+                    onChange={(event, object) =>{ handleExerciseDDonChange(object.value);}}
+                    renderInput={params => <TextField {...params} label="Exercises" variant="outlined"/>}/>
+                    
                     <div>
                         <TextField
                             id="filled-multiline-static"
@@ -154,7 +157,7 @@ const ExerciseBlock = (props) => {
                             rows={4}
                             defaultValue=""
                             variant="filled"
-                            className={classes.textfield}
+                            className={`${classes.textfield} ${classes.marginTop}`}
                             onChange={e => handleExerciseNotesTF(e.target.value)}
                         />
                     </div>
