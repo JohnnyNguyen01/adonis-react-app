@@ -4,14 +4,13 @@ import DashDrawer from "../common/drawer/Drawer";
 import { Grid } from "@material-ui/core";
 import { TextField, Typography, Avatar, Button } from "@material-ui/core";
 import Pagination from '@material-ui/lab/Pagination';
-import { withStyles } from "@material-ui/core/styles";
 import ExerciseBlock from "./widgets/ExerciseBlock";
 import useStyles from "./UseStyles";
 import OutlinedInputLabel from "../common/OutlinedInputLabel/OutlinedInputLabel";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns"
 import { UserContext } from "../providers/UserContext";
-import Moment from 'react-moment';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import moment from 'moment';
 
 
@@ -65,11 +64,6 @@ const Dashboard = ({ history }) => {
             date = incrementDateByOneWeek(date);
         }
         return DatesList;
-    }
-
-    const getThis = () => {
-        var i = exerciseBlockDayDates["1"];
-        return i;
     }
 
     const setUpOutputDates = () => {
@@ -175,8 +169,9 @@ const Dashboard = ({ history }) => {
     }
 
     const selectUserOptions = userDocList.map((doc) => ({
-        value: doc.id,
-        label: doc.data().username
+        'value': doc.id,
+        'label': doc.data().username,
+        'userDoc': doc.data()
     }));
 
     const renderExerciseBlocks = currentExerciseBlockList.currentBlock.map((block, index) => {
@@ -193,6 +188,8 @@ const Dashboard = ({ history }) => {
             </div>);
     });
 
+    console.log(selectUserOptions);
+
     return (
         <Grid container direction="column">
             <Grid item container>
@@ -202,10 +199,18 @@ const Dashboard = ({ history }) => {
                 <Grid item xs={12} sm={8}>
                     <div className={classes.marginTop}>
                         <Typography>Select User: </Typography>
-                        <OutlinedInputLabel
+                        {/* <OutlinedInputLabel
                             inputLabel="User"
                             options={selectUserOptions}
+                            getOptionLabel={user => user.label}
                             onChange={(event) => handleUserDropDownOnChange(event.target.value)}
+                        /> */}
+                        <Autocomplete
+                        id="userSelect"
+                        options={selectUserOptions}
+                        onChange={(event, client) => {handleUserDropDownOnChange(client.value); console.log(client.userDoc);}}
+                        getOptionLabel={user => user.label != null ? user.label : "No Name" }
+                        renderInput={params => <TextField {...params} label="Users" variant="outlined"/>}
                         />
                     </div>
                     <div>
