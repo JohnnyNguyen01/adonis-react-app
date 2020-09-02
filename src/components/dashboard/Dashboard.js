@@ -6,7 +6,8 @@ import { TextField, Typography, Avatar, Button } from "@material-ui/core";
 import Pagination from '@material-ui/lab/Pagination';
 import ExerciseBlock from "./widgets/ExerciseBlock";
 import useStyles from "./UseStyles";
-import OutlinedInputLabel from "../common/OutlinedInputLabel/OutlinedInputLabel";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns"
 import { UserContext } from "../providers/UserContext";
@@ -31,6 +32,8 @@ const Dashboard = ({ history }) => {
     const [allWorkouts, setAllWorkouts] = useState({})
     const [workoutDescription, setWorkoutDescription] = useState("");
     const [exerciseBlockDayDates, setExerciseBlockDayDates] = useState({});
+    const [openAlert, setOpenAlert] = useState(false);
+    const [errorAlert, setErrorAlert] = useState(false);
     const userContext = useContext(UserContext);
     const classes = useStyles();
 
@@ -98,6 +101,24 @@ const Dashboard = ({ history }) => {
         return moment(date).add(number, "days")._d;
     }
 
+    const Alert = (props) => {
+        return <MuiAlert e={6} variant="filled" {...props} />
+    }
+
+    /**
+     * Closes the alert 
+     * @param {*} event 
+     * @param {*} reason 
+     */
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+        setErrorAlert(false);
+    };
+
+
     const setCurrentBlockListToSelectedDay = () => {
         switch (selectedDay) {
             case 1: {
@@ -158,14 +179,19 @@ const Dashboard = ({ history }) => {
     const handleStartDateChange = (date) => setStartDate(date)
 
     const handleSubmitButton = async () => {
-        //let clientDoc = currentClient.data();
-        var latestWorkout = await Firebase.getLatestWorkoutForUser(currentClient.id);
-        if (latestWorkout != null) {
-            await latestWorkout.ref.update({ repeat: false });
+        try {
+            var latestWorkout = await Firebase.getLatestWorkoutForUser(currentClient.id);
+            if (latestWorkout != null) {
+                await latestWorkout.ref.update({ repeat: false });
+            }
+            let coachID = userContext.currentUser.uid;
+            var docRefID = await Firebase.createNewWorkoutDoc(coachID, currentClient.id, startDate, workoutDescription);
+            Firebase.addExerciseToNewWorkoutDoc(docRefID, allWorkouts, exerciseBlockDayDates);
+            setOpenAlert(true);
+        } catch (e) {
+            alert(e);
+            setErrorAlert(true);
         }
-        let coachID = userContext.currentUser.uid;
-        var docRefID = await Firebase.createNewWorkoutDoc(coachID, currentClient.id, startDate, workoutDescription);
-        Firebase.addExerciseToNewWorkoutDoc(docRefID, allWorkouts, exerciseBlockDayDates);
     }
 
     const selectUserOptions = userDocList.map((doc) => ({
@@ -206,11 +232,11 @@ const Dashboard = ({ history }) => {
                             onChange={(event) => handleUserDropDownOnChange(event.target.value)}
                         /> */}
                         <Autocomplete
-                        id="userSelect"
-                        options={selectUserOptions}
-                        onChange={(event, client) => {handleUserDropDownOnChange(client.value); console.log(client.userDoc);}}
-                        getOptionLabel={user => user.label != null ? user.label : "No Name" }
-                        renderInput={params => <TextField {...params} label="Users" variant="outlined"/>}
+                            id="userSelect"
+                            options={selectUserOptions}
+                            onChange={(event, client) => { handleUserDropDownOnChange(client.value); console.log(client.userDoc); }}
+                            getOptionLabel={user => user.label != null ? user.label : "No Name"}
+                            renderInput={params => <TextField {...params} label="Users" variant="outlined" />}
                         />
                     </div>
                     <div>
@@ -268,6 +294,16 @@ const Dashboard = ({ history }) => {
                     </div>
                 </Grid>
             </Grid>
+            <Snackbar open={errorAlert} autoHideDuration={6000} onClose={handleClose}>
+                <Alert severity="error">
+                    Workout couldn't be created
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    Workout successfully created!
+                </Alert>
+            </Snackbar>
         </Grid>
     );
 }
