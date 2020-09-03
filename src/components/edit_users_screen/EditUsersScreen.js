@@ -1,6 +1,5 @@
 import React from "react";
 import {Grid} from "@material-ui/core";
-import Appbar from "../common/Appbar/Appbar";
 import DashDrawer from "../common/drawer/Drawer";
 import UserTable from "./UserTable/UserTable";
 
