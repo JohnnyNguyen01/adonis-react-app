@@ -39,6 +39,13 @@ const useStyles = makeStyles({
     }, 
     inlineDisplay : {
         display: "inline-block"
+    },
+    checkBoxDiv: {
+        width: "100%"
+    },
+    saveWorkoutTextField : {
+        textAlign: "center",
+        marginLeft: "20px"
     }
 });
 

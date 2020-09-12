@@ -31,7 +31,9 @@ const ManageExercisesScreen = ({ history }) => {
             setExerciseList(await Firebase.getExerciseList());
         }
         getExercises();
-    }, [exerciseList]);
+    }, []);
+
+    console.log("manageExercisePage Rendered");
 
     const handleClose = () => {
         setShowAlert(false);
@@ -101,7 +103,7 @@ const ManageExercisesScreen = ({ history }) => {
                     </Grid>
                     <Grid item container className={classes.marginTop}>
                         <Button
-                            classes={classes.addButton}
+                            className={classes.addButton}
                             color="primary"
                             variant="contained"
                             onClick={handleAddExerciseButton}>

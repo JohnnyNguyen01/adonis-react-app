@@ -193,6 +193,22 @@ class Firebase {
             alert(e);
         }
     }
+
+    /**
+     * Save the workout created by the coach to the database for future use
+     * @param {String} workoutName The name fo the workout
+     * @param {String} coachID  The UID of the coach
+     * @param {Object} allWorkouts The object containing all the exercises
+     */
+    async saveCreatedWorkout(workoutName,coachID,allWorkouts){
+        app.firestore().collection("saved_workout_templates").add({
+            'coachID': coachID,
+            'workoutName' : workoutName,
+            'date created' : new Date(),
+            'exercises' : allWorkouts
+           });
+    }
+
     //returns every single workout in a list
     async getAllWorkoutsAsDocList() {
         var workoutList = [];

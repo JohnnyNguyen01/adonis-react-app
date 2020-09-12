@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import DashDrawer from "../common/drawer/Drawer";
-import { Grid, Avatar, Typography } from "@material-ui/core";
+import { Grid, Avatar, Typography, Paper } from "@material-ui/core";
 import { CurrentClientContext } from "../providers/CurrentClientContext";
 import { makeStyles } from '@material-ui/core/styles';
 import DatePicker from "react-horizontal-datepicker";
-
+import Firebase from "../../firebase";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,11 +19,17 @@ const useStyles = makeStyles((theme) => ({
         width: theme.spacing(15),
         height: theme.spacing(15),
     },
+    topPaper: {
+        paddingLeft: "20%",
+        width: theme.spacing(100),
+        height: theme.spacing(50)
+    },
 
 }));
 
 const UserProfileScreen = (props) => {
     const [selectedDate, setSelecteDate] = useState(new Date());
+    const [latestWorkout, setLatestWorkout] = useState({});
     const { currentClient, setCurrentClient } = useContext(CurrentClientContext);
     const classes = useStyles();
 
@@ -31,7 +37,7 @@ const UserProfileScreen = (props) => {
 
     }, []);
 
-    console.log(selectedDate);
+    console.log(latestWorkout);
 
     return (
         <Grid container direction="column">
@@ -41,7 +47,7 @@ const UserProfileScreen = (props) => {
                     <DashDrawer />
                 </Grid>
                 <Grid item xs={12} sm={8} className={classes.root}>
-                    <div id="clientInfo">
+                    <Paper id="clientInfo" elevation={6} className={classes.topPaper}>
                         <Avatar
                             alt={`${currentClient.username}`}
                             src={currentClient.url}
@@ -65,7 +71,7 @@ const UserProfileScreen = (props) => {
                         <Typography variant="subtitle2" gutterBottom>
                             max Squat: {currentClient.userDoc.maxDead} Kg
                         </Typography>
-                    </div>
+                    </Paper>
                     <div>
                         <DatePicker getSelectedDay={date => setSelecteDate(date)}
                             endDate={100}

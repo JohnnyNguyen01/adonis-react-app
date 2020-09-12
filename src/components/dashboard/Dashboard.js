@@ -12,6 +12,7 @@ import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns"
 import { UserContext } from "../providers/UserContext";
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Checkbox from '@material-ui/core/Checkbox';
 import moment from 'moment';
 
 
@@ -34,6 +35,8 @@ const Dashboard = ({ history }) => {
     const [exerciseBlockDayDates, setExerciseBlockDayDates] = useState({});
     const [openAlert, setOpenAlert] = useState(false);
     const [errorAlert, setErrorAlert] = useState(false);
+    const [isChecked, setIsChecked] = useState(false)
+    const [workoutName, setWorkoutName] = useState("");
     const userContext = useContext(UserContext);
     const classes = useStyles();
 
@@ -43,6 +46,7 @@ const Dashboard = ({ history }) => {
         //     alert("please login before accessing this page");
         //     history.replace("/");
         // }
+
         const fetchUsers = async () => {
             setUserDocList(await Firebase.getUserListAsDoc());
         }
@@ -52,6 +56,13 @@ const Dashboard = ({ history }) => {
     }, [startDate, selectedDay, workoutExerciseListObj, exerciseBlockListDayOne, exerciseBlockListDayTwo,
         exerciseBlockListDayThree, exerciseBlockListDayFour, exerciseBlockListDayFive, exerciseBlockListDaySix, exerciseBlockListDaySeven]);
 
+    /**
+     * Toggle checkbox on or off
+     * @param {object} event 
+     */
+    const handleCheckbox = (event) => {
+        setIsChecked(!isChecked);
+    }
 
     /**
      *  Increments supplied date weekly by num times
@@ -185,6 +196,9 @@ const Dashboard = ({ history }) => {
                 await latestWorkout.ref.update({ repeat: false });
             }
             let coachID = userContext.currentUser.uid;
+            if (isChecked) {
+                Firebase.saveCreatedWorkout(workoutName, coachID, allWorkouts)
+            }
             var docRefID = await Firebase.createNewWorkoutDoc(coachID, currentClient.id, startDate, workoutDescription);
             Firebase.addExerciseToNewWorkoutDoc(docRefID, allWorkouts, exerciseBlockDayDates);
             setOpenAlert(true);
@@ -260,7 +274,11 @@ const Dashboard = ({ history }) => {
                             <Typography>{currentClient != null ?
                                 currentClient.data().username : null}
                             </Typography>
-                            <Typography>Day {selectedDay}</Typography>
+                            <Typography
+                                variant="h5"
+                                className="marginTop">
+                                Day {selectedDay}
+                            </Typography>
                         </div>
                         <form>
                             <TextField
@@ -275,18 +293,39 @@ const Dashboard = ({ history }) => {
                             />
                         </form>
                         {renderExerciseBlocks}
+                        {/* //todo: add checkbox here: "Save workout?" */}
+                        <div id="Save_Workout" className={classes.marginTop}>
+                            <Checkbox
+                                checked={isChecked}
+                                onChange={handleCheckbox}
+                                inputProps={{ 'aria-label': "save workout checkbox" }}
+                                className={classes.inlineDisplay}
+                            />
+                            <Typography
+                                className={classes.inlineDisplay}>
+                                Save Workout
+                            </Typography>
+                            {isChecked ? <TextField
+                                className={`${classes.saveWorkoutTextField} `}
+                                id="workout_name"
+                                label="Workout Name"
+                                onChange={event => setWorkoutName(event.target.value)}
+                            /> : null}
+                        </div>
+
                         <Button
                             className={`${classes.marginTop} ${classes.button}`}
                             variant="contained"
                             onClick={() => handleAddNewExerciseBtn()}>Add new Exercise
-                            </Button>
+                        </Button>
                         <Button
                             onClick={() => handleSubmitButton()}
                             variant="contained"
                             className={`${classes.marginTop} ${classes.button}`}
                             style={{ backgroundColor: "LimeGreen", marginLeft: 12 }}>
                             Publish Workout
-                            </Button>
+                        </Button>
+
                         <Pagination
                             className={`${classes.marginTop} ${classes.centre}`}
                             count={7}
