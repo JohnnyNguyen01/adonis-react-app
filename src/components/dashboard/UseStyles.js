@@ -44,8 +44,10 @@ const useStyles = makeStyles({
         width: "100%"
     },
     saveWorkoutTextField : {
-        textAlign: "center",
         marginLeft: "20px"
+    },
+    newOrSavedWorkoutButtons : {
+        marginRight: "10px"
     }
 });
 

@@ -36,7 +36,10 @@ const Dashboard = ({ history }) => {
     const [openAlert, setOpenAlert] = useState(false);
     const [errorAlert, setErrorAlert] = useState(false);
     const [isChecked, setIsChecked] = useState(false)
-    const [workoutName, setWorkoutName] = useState("");
+    const [workoutName, setWorkoutName] = useState(false);
+    const [showNewWorkoutForm, setShowNewWorkoutForm] = useState(false);
+    const [showUseSavedWorkoutForm, setShowUseSavedWorkoutForm] = useState(false);
+    const [showInitialWorkoutButtons, setShowInitialWorkoutButtons] = useState(true);
     const userContext = useContext(UserContext);
     const classes = useStyles();
 
@@ -182,6 +185,16 @@ const Dashboard = ({ history }) => {
         });
     }
 
+    const handleNewWorkoutButton = () => {
+        setShowNewWorkoutForm(!showNewWorkoutForm);
+        setShowInitialWorkoutButtons(!showInitialWorkoutButtons);
+    }
+
+    const handleSavedWorkoutButton = () => {
+        setShowUseSavedWorkoutForm(!showNewWorkoutForm);
+        setShowInitialWorkoutButtons(!showInitialWorkoutButtons);
+    }
+
     const handleAddNewExerciseBtn = () => {
         var currentBlock = currentExerciseBlockList.currentBlock;
         currentExerciseBlockList.setMethod([...currentBlock, currentBlock.push(currentBlock.length + 1)]);
@@ -228,8 +241,6 @@ const Dashboard = ({ history }) => {
             </div>);
     });
 
-    console.log(selectUserOptions);
-
     return (
         <Grid container direction="column">
             <Grid item container>
@@ -239,12 +250,7 @@ const Dashboard = ({ history }) => {
                 <Grid item xs={12} sm={8}>
                     <div className={classes.marginTop}>
                         <Typography>Select User: </Typography>
-                        {/* <OutlinedInputLabel
-                            inputLabel="User"
-                            options={selectUserOptions}
-                            getOptionLabel={user => user.label}
-                            onChange={(event) => handleUserDropDownOnChange(event.target.value)}
-                        /> */}
+
                         <Autocomplete
                             id="userSelect"
                             options={selectUserOptions}
@@ -280,56 +286,71 @@ const Dashboard = ({ history }) => {
                                 Day {selectedDay}
                             </Typography>
                         </div>
-                        <form>
-                            <TextField
-                                id="filled-multiline-static"
-                                label="Coach Instructions"
-                                onChange={(event) => setWorkoutDescription(event.target.value)}
-                                multiline
-                                rows={4}
-                                defaultValue=""
-                                variant="filled"
-                                className={classes.textfield}
-                            />
-                        </form>
-                        {renderExerciseBlocks}
-                        {/* //todo: add checkbox here: "Save workout?" */}
-                        <div id="Save_Workout" className={classes.marginTop}>
-                            <Checkbox
-                                checked={isChecked}
-                                onChange={handleCheckbox}
-                                inputProps={{ 'aria-label': "save workout checkbox" }}
-                                className={classes.inlineDisplay}
-                            />
-                            <Typography
-                                className={classes.inlineDisplay}>
-                                Save Workout
+                        {showInitialWorkoutButtons ? <div className={classes.marginTop}>
+                            <Button
+                                className={classes.newOrSavedWorkoutButtons}
+                                variant="outlined"
+                                onClick={() => handleNewWorkoutButton()}>
+                                Create New Workout
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                onClick={() => handleSavedWorkoutButton()}>
+                                Use Saved Workout
+                            </Button>
+                        </div> : null}
+                        {showNewWorkoutForm ? <div id="newWorkoutForm">
+                            <form>
+                                <TextField
+                                    id="filled-multiline-static"
+                                    label="Coach Instructions"
+                                    onChange={(event) => setWorkoutDescription(event.target.value)}
+                                    multiline
+                                    rows={4}
+                                    defaultValue=""
+                                    variant="filled"
+                                    className={classes.textfield}
+                                />
+                            </form>
+                            {renderExerciseBlocks}
+                            {/* //todo: add checkbox here: "Save workout?" */}
+                            <div id="Save_Workout" className={classes.marginTop}>
+                                <Checkbox
+                                    checked={isChecked}
+                                    onChange={handleCheckbox}
+                                    inputProps={{ 'aria-label': "save workout checkbox" }}
+                                    className={classes.inlineDisplay}
+                                />
+                                <Typography
+                                    className={classes.inlineDisplay}>
+                                    Save Workout
                             </Typography>
-                            {isChecked ? <TextField
-                                className={`${classes.saveWorkoutTextField} `}
-                                id="workout_name"
-                                label="Workout Name"
-                                onChange={event => setWorkoutName(event.target.value)}
-                            /> : null}
-                        </div>
+                                {isChecked ? <TextField
+                                    className={`${classes.saveWorkoutTextField} `}
+                                    id="workout_name"
+                                    label="Workout Name"
+                                    onChange={event => setWorkoutName(event.target.value)}
+                                /> : null}
+                            </div>
 
-                        <Button
-                            className={`${classes.marginTop} ${classes.button}`}
-                            variant="contained"
-                            onClick={() => handleAddNewExerciseBtn()}>Add new Exercise
-                        </Button>
-                        <Button
-                            onClick={() => handleSubmitButton()}
-                            variant="contained"
-                            className={`${classes.marginTop} ${classes.button}`}
-                            style={{ backgroundColor: "LimeGreen", marginLeft: 12 }}>
-                            Publish Workout
-                        </Button>
+                            <Button
+                                className={`${classes.marginTop} ${classes.button}`}
+                                variant="contained"
+                                onClick={() => handleAddNewExerciseBtn()}>Add new Exercise
+                            </Button>
+                            <Button
+                                onClick={() => handleSubmitButton()}
+                                variant="contained"
+                                className={`${classes.marginTop} ${classes.button}`}
+                                style={{ backgroundColor: "LimeGreen", marginLeft: 12 }}>
+                                Publish Workout
+                            </Button>
 
-                        <Pagination
-                            className={`${classes.marginTop} ${classes.centre}`}
-                            count={7}
-                            onChange={(event, page) => { setSelectedDay(page) }} />
+                            <Pagination
+                                className={`${classes.marginTop} ${classes.centre}`}
+                                count={7}
+                                onChange={(event, page) => { setSelectedDay(page) }} />
+                        </div> : null}
                     </div>
                 </Grid>
             </Grid>
