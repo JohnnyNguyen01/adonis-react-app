@@ -21,7 +21,8 @@
     "react-moment": "^0.9.7",
     "react-player": "^2.6.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.3"
+    "react-scripts": "^3.4.3",
+    "tubular-react": "^4.2.8"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -14,6 +14,7 @@ import { UserContext } from "../providers/UserContext";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Checkbox from '@material-ui/core/Checkbox';
 import moment from 'moment';
+import SavedWorkoutForm from "./widgets/SavedWorkoutForm";
 
 
 const Dashboard = ({ history }) => {
@@ -299,6 +300,10 @@ const Dashboard = ({ history }) => {
                                 Use Saved Workout
                             </Button>
                         </div> : null}
+                        {showUseSavedWorkoutForm ?
+                         
+                         <SavedWorkoutForm/> : null}
+
                         {showNewWorkoutForm ? <div id="newWorkoutForm">
                             <form>
                                 <TextField
@@ -313,7 +318,6 @@ const Dashboard = ({ history }) => {
                                 />
                             </form>
                             {renderExerciseBlocks}
-                            {/* //todo: add checkbox here: "Save workout?" */}
                             <div id="Save_Workout" className={classes.marginTop}>
                                 <Checkbox
                                     checked={isChecked}

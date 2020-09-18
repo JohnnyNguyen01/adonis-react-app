@@ -203,7 +203,7 @@ class Firebase {
     async saveCreatedWorkout(workoutName,coachID,allWorkouts){
         app.firestore().collection("saved_workout_templates").add({
             'coachID': coachID,
-            'workoutName' : workoutName,
+            'workout_Name' : workoutName,
             'date created' : new Date(),
             'exercises' : allWorkouts
            });
@@ -216,9 +216,22 @@ class Firebase {
         workouts.forEach(workout => workoutList.push(workout.data()));
         return workoutList;
     }
-
+    
+    /**
+     *  Update a portion of a workout
+     * @param {String} docRef The document Reference ID of the workout in the workouts colleciton
+     * @param {Object} updateObj The object to be updated/appended 
+     */
     async updateWorkoutWithRef(docRef, updateObj) {
         await docRef.update(updateObj);
+    }
+
+    /**
+     * Retrieves all the workouts in the "saved_workout_templates" collection 
+     */
+    async getAllSavedWorkouts(){
+        let allWorkouts = await app.firestore().collection("saved_workout_templates").get();
+        return allWorkouts.docs;
     }
 }
 
